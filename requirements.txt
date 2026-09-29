@@ -1,0 +1,15 @@
+numpy>=1.26
+scipy>=1.11
+pandas>=2.0
+matplotlib>=3.8
+yfinance>=0.2.40
+
+# Qiskit 2.x. The original imported Sampler and BackendSamplerV2 from
+# qiskit.primitives; neither exists any more, so it raises on import.
+qiskit>=2.0
+qiskit-optimization>=0.7
+
+# Only needed for solvers.exact_eigensolver, which is a classical cross-check on
+# the Ising encoding. qiskit-algorithms does not work with Qiskit 2.x for QAOA, so
+# the QAOA solver here is written against qiskit primitives directly instead.
+qiskit-algorithms>=0.3

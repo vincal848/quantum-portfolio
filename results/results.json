@@ -1,0 +1,381 @@
+{
+  "setup": {
+    "tickers": [
+      "AAPL",
+      "MSFT",
+      "GOOG",
+      "AMZN",
+      "TSLA",
+      "JPM",
+      "XOM",
+      "JNJ",
+      "PG",
+      "NVDA"
+    ],
+    "lambda": 0.5,
+    "cardinality": 3,
+    "risk_free": 0.03,
+    "synthetic": false,
+    "covariance_psd": true
+  },
+  "solvers": {
+    "brute_force": {
+      "selected": [
+        4,
+        6,
+        8
+      ],
+      "objective": -0.6787742578210192,
+      "seconds": 0.000579700106754899,
+      "feasible": true,
+      "approximation_ratio": 1.0,
+      "found_optimum": true
+    },
+    "greedy": {
+      "selected": [
+        4,
+        6,
+        8
+      ],
+      "objective": -0.6787742578210192,
+      "seconds": 0.00012989994138479233,
+      "feasible": true,
+      "approximation_ratio": 1.0,
+      "found_optimum": true
+    },
+    "qaoa": {
+      "selected": [
+        4,
+        6,
+        8
+      ],
+      "objective": -0.6787742578210192,
+      "seconds": 11.68844940001145,
+      "feasible": true,
+      "top_sample_feasible": true,
+      "n_qubits": 10,
+      "energy": 7.2295456587714995,
+      "shots_on_top": 119,
+      "approximation_ratio": 1.0,
+      "found_optimum": true
+    },
+    "exact_eigensolver": {
+      "selected": [
+        4,
+        6,
+        8
+      ],
+      "objective": -0.6787742578210192,
+      "seconds": 0.011097499867901206,
+      "feasible": true,
+      "energy": -0.6787742578209972,
+      "approximation_ratio": 1.0,
+      "found_optimum": true
+    }
+  },
+  "frontier": [
+    {
+      "lambda": 0.1,
+      "selected": [
+        4,
+        6,
+        9
+      ],
+      "return": 0.49668622858337763,
+      "volatility": 0.4316654682100028,
+      "sharpe": 1.0811293998535398
+    },
+    {
+      "lambda": 1.1473684210526316,
+      "selected": [
+        4,
+        7,
+        8
+      ],
+      "return": 0.32753567503620135,
+      "volatility": 0.2974907335332133,
+      "sharpe": 1.0001510685810422
+    },
+    {
+      "lambda": 2.194736842105263,
+      "selected": [
+        6,
+        7,
+        8
+      ],
+      "return": 0.1744870201761748,
+      "volatility": 0.22523411094222134,
+      "sharpe": 0.6414970608658811
+    },
+    {
+      "lambda": 3.2421052631578946,
+      "selected": [
+        6,
+        7,
+        8
+      ],
+      "return": 0.1744870201761748,
+      "volatility": 0.22523411094222134,
+      "sharpe": 0.6414970608658811
+    },
+    {
+      "lambda": 4.289473684210526,
+      "selected": [
+        6,
+        7,
+        8
+      ],
+      "return": 0.1744870201761748,
+      "volatility": 0.22523411094222134,
+      "sharpe": 0.6414970608658811
+    },
+    {
+      "lambda": 5.336842105263157,
+      "selected": [
+        6,
+        7,
+        8
+      ],
+      "return": 0.1744870201761748,
+      "volatility": 0.22523411094222134,
+      "sharpe": 0.6414970608658811
+    },
+    {
+      "lambda": 6.384210526315789,
+      "selected": [
+        6,
+        7,
+        8
+      ],
+      "return": 0.1744870201761748,
+      "volatility": 0.22523411094222134,
+      "sharpe": 0.6414970608658811
+    },
+    {
+      "lambda": 7.43157894736842,
+      "selected": [
+        6,
+        7,
+        8
+      ],
+      "return": 0.1744870201761748,
+      "volatility": 0.22523411094222134,
+      "sharpe": 0.6414970608658811
+    },
+    {
+      "lambda": 8.478947368421052,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 9.526315789473683,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 10.573684210526315,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 11.621052631578946,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 12.668421052631578,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 13.71578947368421,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 14.76315789473684,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 15.810526315789472,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 16.857894736842105,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 17.905263157894737,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 18.95263157894737,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    },
+    {
+      "lambda": 20.0,
+      "selected": [
+        2,
+        7,
+        8
+      ],
+      "return": 0.12721016498682447,
+      "volatility": 0.22054808111063492,
+      "sharpe": 0.44076631497900143
+    }
+  ],
+  "scaling": [
+    {
+      "n_assets": 4,
+      "n_qubits": 4,
+      "trials": 5,
+      "found_optimum": 5,
+      "hit_rate": 1.0,
+      "mean_approximation_ratio": 1.0,
+      "mean_seconds": 2.5145939799956976
+    },
+    {
+      "n_assets": 5,
+      "n_qubits": 5,
+      "trials": 5,
+      "found_optimum": 5,
+      "hit_rate": 1.0,
+      "mean_approximation_ratio": 1.0,
+      "mean_seconds": 2.6409101199824363
+    },
+    {
+      "n_assets": 6,
+      "n_qubits": 6,
+      "trials": 5,
+      "found_optimum": 5,
+      "hit_rate": 1.0,
+      "mean_approximation_ratio": 1.0,
+      "mean_seconds": 4.565420260000974
+    },
+    {
+      "n_assets": 7,
+      "n_qubits": 7,
+      "trials": 5,
+      "found_optimum": 5,
+      "hit_rate": 1.0,
+      "mean_approximation_ratio": 1.0,
+      "mean_seconds": 4.742223219992593
+    },
+    {
+      "n_assets": 8,
+      "n_qubits": 8,
+      "trials": 5,
+      "found_optimum": 5,
+      "hit_rate": 1.0,
+      "mean_approximation_ratio": 1.0,
+      "mean_seconds": 5.699907639995217
+    },
+    {
+      "n_assets": 9,
+      "n_qubits": 9,
+      "trials": 5,
+      "found_optimum": 5,
+      "hit_rate": 1.0,
+      "mean_approximation_ratio": 1.0,
+      "mean_seconds": 7.436810760060325
+    },
+    {
+      "n_assets": 10,
+      "n_qubits": 10,
+      "trials": 5,
+      "found_optimum": 5,
+      "hit_rate": 1.0,
+      "mean_approximation_ratio": 1.0,
+      "mean_seconds": 14.7387401599437
+    },
+    {
+      "n_assets": 11,
+      "n_qubits": 11,
+      "trials": 5,
+      "found_optimum": 5,
+      "hit_rate": 1.0,
+      "mean_approximation_ratio": 1.0,
+      "mean_seconds": 31.110515200020746
+    },
+    {
+      "n_assets": 12,
+      "n_qubits": 12,
+      "trials": 5,
+      "found_optimum": 5,
+      "hit_rate": 1.0,
+      "mean_approximation_ratio": 1.0,
+      "mean_seconds": 40.1798693000339
+    }
+  ]
+}

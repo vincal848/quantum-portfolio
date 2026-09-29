@@ -1,0 +1,25 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      # The encoding, decoding, objective and metric tests need neither qiskit nor
+      # the network. The QAOA tests skip themselves when qiskit is absent.
+      - name: Install
+        run: pip install numpy scipy pandas pytest
+      - name: Test
+        run: pytest tests -q

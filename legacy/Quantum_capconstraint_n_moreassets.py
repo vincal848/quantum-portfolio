@@ -1,3 +1,31 @@
+"""SUPERSEDED. Kept for reference; this is one of the original coursework scripts.
+
+None of these three files run on a current install. Qiskit 2.x removed the V1
+`Sampler` and `BackendSamplerV2` that Quantum_optimizer_RealData_Classes.py imports
+from qiskit.primitives, and yfinance no longer exposes an 'Adj Close' column now
+that auto_adjust defaults to True.
+
+Problems the rewrite documents and tests:
+
+1. Bit ordering. `[i for i, bit in enumerate(binary_decision) if bit == "1"]` reads
+   the bitstring left to right, but Qiskit is little-endian - qubit 0 is the
+   RIGHTMOST character. The reported selection was mirrored: asset 3 named when the
+   answer was asset 0. Invisible on a symmetric solution, which the toy example had.
+2. No reference answer. NumPyMinimumEigensolver returns a selection and nothing
+   checks whether it is the optimum, or whether a greedy pass would match it.
+3. The Sharpe ratio divides excess return by the VARIANCE rather than the standard
+   deviation, which inflates it by roughly 1/sigma.
+4. It compares a DAILY mean return against an ANNUAL risk-free rate.
+5. The efficient-frontier loop appends `format(x, ".3f")` strings and then plots
+   them, so both axes are categorical text rather than numbers.
+6. The random covariance matrix is symmetrized uniform noise and is not positive
+   semi-definite - two negative eigenvalues at the seed used.
+7. NumPyMinimumEigensolver is exact classical diagonalization of the Hamiltonian,
+   i.e. an exhaustive 2^n search. It is not a quantum method.
+
+The working version is portfolio.py, solvers.py, metrics.py, data.py and run.py.
+"""
+
 import yfinance as yf
 #import alphavantage as av
 import numpy as np
