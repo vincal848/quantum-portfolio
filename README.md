@@ -73,73 +73,6 @@ is what says the objective and the moment estimates are wired up correctly.
 
 ![Frontier over risk aversion](docs/img/frontier.png)
 
-## What was wrong
-
-**The selection was mirrored.** This is the one that changes the answers. The code
-decoded the measured bitstring with
-
-```python
-selected_assets = [i for i, bit in enumerate(binary_decision) if bit == "1"]
-```
-
-`enumerate` reads left to right, so index 0 is the *most significant* bit. Qiskit is
-little-endian: qubit 0 is the **rightmost** character. On a problem where only asset
-0 should be held, the original names asset 3; where asset 3 should be held, it names
-asset 0. Set up so the best and worst assets swap places, it is an exact mirror:
-
-```
-bitstring 0001    original reads [3]    correct reading [0]    brute force says [0]
-bitstring 1000    original reads [0]    correct reading [3]    brute force says [3]
-```
-
-It survived because the toy example in the file had a symmetric optimum, where the
-two readings agree. `tests/test_portfolio.py` now checks every position in turn.
-
-**There was no reference answer.** The original solved the problem and printed the
-result. Nothing established whether it was the optimum, or whether something simpler
-would have found it too. Adding brute force and greedy is what turned this from a
-demonstration into a measurement — the same gap I found in
-[oil_price_prediction](https://github.com/vincal848/oil_price_prediction), where the
-missing benchmark was naive persistence.
-
-**The Sharpe ratio divided by variance, not volatility.**
-
-```python
-sharpe_ratio = (portfolio_return - risk_free_rate) / portfolio_risk   # portfolio_risk = w'Σw
-```
-
-Sharpe divides by the standard deviation. Dividing by the variance inflates the
-result by roughly `1/σ`.
-
-**It compared a daily return against an annual rate.** `data.pct_change().mean()` is
-a *daily* mean; `risk_free_rate = 0.03` is annual. So the excess return was wrong
-before the division happened. On daily numbers the mismatch is large enough to flip
-the sign — a portfolio earning 15% a year reads as a loss. Everything is annualized
-on an explicit 252-day basis now.
-
-**The frontier plot was drawing strings.** The function returned
-`format(portfolio_return*100, ".3f")` — text, not numbers — and the frontier loop
-appended those and handed them to `plt.plot`. Both axes were categorical labels, so
-the curve meant nothing.
-
-**The random covariance matrix was not a covariance matrix.** Symmetrized uniform
-noise with a positive diagonal is generally indefinite. At the seed used it has two
-negative eigenvalues (minimum −0.0031), so `x'Σx` is negative in some directions and
-the risk term rewards risk. In the 0/1 domain the minimum reachable `x'Σx` here is
-still 0, so it did not actually produce a negative variance — but it is not a valid
-input, and `data.nearest_psd` now repairs it.
-
-**`NumPyMinimumEigensolver` is not quantum.** It builds the Ising Hamiltonian and
-diagonalizes it exactly, classically — an exhaustive `2ⁿ` search in different
-notation. It is kept here as `exact_eigensolver`, relabelled, because it is a genuine
-cross-check that the Hamiltonian encodes the intended problem: if it disagrees with
-brute force, the encoding is wrong rather than the solver.
-
-**None of the three scripts run today.** Qiskit 2.x removed the V1 `Sampler` and
-`BackendSamplerV2` imported from `qiskit.primitives`, and yfinance's `auto_adjust`
-now defaults to `True`, so there is no `Adj Close` column to index. They are kept,
-annotated, in [legacy/](legacy/).
-
 ## How it works
 
 ```mermaid
@@ -226,7 +159,7 @@ pytest tests -q -m "not slow"   # 25 of them, no qiskit needed
 | `metrics.py` | Return, volatility, Sharpe and annualization, on a consistent basis |
 | `data.py` | Price loading with caching, moment estimation, PSD repair |
 | `run.py` | The comparison, the frontier, the scaling study, `results/` and figures |
-| `tests/` | 32 tests, including a named regression for each defect above |
+| `tests/` | 32 tests |
 | `docs/BACKGROUND.md` | My original write-up: classical vs quantum, QAOA, adiabatic computing |
 | `legacy/` | The three original scripts, annotated. None run on current dependencies |
 
