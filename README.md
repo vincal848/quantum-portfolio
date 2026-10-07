@@ -1,6 +1,6 @@
 # Quantum Portfolio Selection: QAOA against an exact solver
 
-[![tests](https://github.com/vincal848/quantum_portfolio/actions/workflows/tests.yml/badge.svg)](https://github.com/vincal848/quantum_portfolio/actions/workflows/tests.yml)
+[![tests](https://github.com/vincal848/quantum-portfolio/actions/workflows/tests.yml/badge.svg)](https://github.com/vincal848/quantum-portfolio/actions/workflows/tests.yml)
 
 This started as an extension of a project in *PHYS 4315: Introduction to Quantum
 Computing*, cross-listed as *ECE 5332*. Most of the background came from Thomas
