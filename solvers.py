@@ -1,7 +1,7 @@
 """Four ways to solve the selection problem, all returning the same shape.
 
-Each solver returns a dict with `selected`, `objective` and `seconds`, so they can
-be compared directly. Brute force is the reference: at these sizes the problem is
+Each solver returns a `Solution` (or a subclass with solver-specific extras), so they
+can be compared directly. Timing is the caller's job -- see run.py. Brute force is the reference: at these sizes the problem is
 small enough to enumerate exactly, which means every other solver can be scored
 against the true optimum rather than against the others.
 
@@ -11,21 +11,41 @@ answer was right.
 """
 
 import itertools
-import time
+from dataclasses import dataclass
 
 import numpy as np
 
 from portfolio import decode, objective
 
 
-def brute_force(mu, sigma, lam, cardinality=None):
+@dataclass(frozen=True)
+class Solution:
+    selected: list[int]
+    objective: float
+    feasible: bool
+
+
+@dataclass(frozen=True)
+class QaoaSolution(Solution):
+    top_sample_feasible: bool
+    n_qubits: int
+    energy: float
+    shots_on_top: int
+
+
+@dataclass(frozen=True)
+class EigenSolution(Solution):
+    energy: float
+
+
+def brute_force(mu: np.ndarray, sigma: np.ndarray, lam: float,
+                cardinality: int | None = None) -> Solution:
     """Exact optimum by enumerating every subset. The reference answer.
 
     2^n subsets, so this is only usable while n is small -- which it is here, and
     that is the point: on problems a quantum heuristic can actually run on today,
     the exact answer is cheap. Any claim of quantum advantage has to survive that.
     """
-    start = time.perf_counter()
     n = len(mu)
 
     best_x, best_value = None, float("inf")
@@ -39,22 +59,17 @@ def brute_force(mu, sigma, lam, cardinality=None):
     if best_x is None:
         raise ValueError("no feasible selection for cardinality=%r" % (cardinality,))
 
-    return {
-        "selected": [i for i, b in enumerate(best_x) if b == 1],
-        "objective": best_value,
-        "seconds": time.perf_counter() - start,
-        "feasible": True,
-    }
+    return Solution([i for i, b in enumerate(best_x) if b == 1], best_value, True)
 
 
-def greedy(mu, sigma, lam, cardinality=None):
+def greedy(mu: np.ndarray, sigma: np.ndarray, lam: float,
+           cardinality: int | None = None) -> Solution:
     """Classical baseline: add whichever asset improves the objective most.
 
     Included because 'QAOA beat random' is not interesting. The question is whether
     it beats something anyone would actually reach for, and a greedy pass takes
     microseconds.
     """
-    start = time.perf_counter()
     n = len(mu)
     target = cardinality if cardinality is not None else n
 
@@ -79,16 +94,13 @@ def greedy(mu, sigma, lam, cardinality=None):
 
     x = np.zeros(n)
     x[chosen] = 1
-    return {
-        "selected": sorted(chosen),
-        "objective": objective(x, mu, sigma, lam),
-        "seconds": time.perf_counter() - start,
-        "feasible": cardinality is None or len(chosen) == cardinality,
-    }
+    return Solution(sorted(chosen), objective(x, mu, sigma, lam),
+                    cardinality is None or len(chosen) == cardinality)
 
 
-def qaoa(mu, sigma, lam, cardinality=None, reps=2, restarts=3, maxiter=400,
-         shots=8192, seed=7):
+def qaoa(mu: np.ndarray, sigma: np.ndarray, lam: float,
+         cardinality: int | None = None, reps: int = 2, restarts: int = 3,
+         maxiter: int = 400, shots: int = 8192, seed: int = 7) -> QaoaSolution:
     """Quantum Approximate Optimization Algorithm on a statevector simulator.
 
     Written against Qiskit 2.x primitives directly rather than through
@@ -106,7 +118,6 @@ def qaoa(mu, sigma, lam, cardinality=None, reps=2, restarts=3, maxiter=400,
 
     from portfolio import build_program, to_ising
 
-    start = time.perf_counter()
     n = len(mu)
 
     qp = build_program(mu, sigma, lam, cardinality)
@@ -156,19 +167,19 @@ def qaoa(mu, sigma, lam, cardinality=None, reps=2, restarts=3, maxiter=400,
         chosen, chosen_value = top_selected, objective(
             np.isin(np.arange(n), top_selected).astype(float), mu, sigma, lam)
 
-    return {
-        "selected": sorted(chosen),
-        "objective": chosen_value,
-        "seconds": time.perf_counter() - start,
-        "feasible": cardinality is None or len(chosen) == cardinality,
-        "top_sample_feasible": top_feasible,
-        "n_qubits": n_qubits,
-        "energy": float(best.fun) + offset,
-        "shots_on_top": ranked[0][1],
-    }
+    return QaoaSolution(
+        selected=sorted(chosen),
+        objective=chosen_value,
+        feasible=cardinality is None or len(chosen) == cardinality,
+        top_sample_feasible=top_feasible,
+        n_qubits=n_qubits,
+        energy=float(best.fun) + offset,
+        shots_on_top=ranked[0][1],
+    )
 
 
-def exact_eigensolver(mu, sigma, lam, cardinality=None):
+def exact_eigensolver(mu: np.ndarray, sigma: np.ndarray, lam: float,
+                      cardinality: int | None = None) -> EigenSolution:
     """Classical exact diagonalization of the Ising Hamiltonian.
 
     This is what the original used and called quantum. It is not: it builds the same
@@ -182,7 +193,6 @@ def exact_eigensolver(mu, sigma, lam, cardinality=None):
 
     from portfolio import build_program, to_ising
 
-    start = time.perf_counter()
     n = len(mu)
     qp = build_program(mu, sigma, lam, cardinality)
     operator, offset, _ = to_ising(qp)
@@ -197,10 +207,9 @@ def exact_eigensolver(mu, sigma, lam, cardinality=None):
     x = np.zeros(n)
     x[selected] = 1
 
-    return {
-        "selected": selected,
-        "objective": objective(x, mu, sigma, lam),
-        "seconds": time.perf_counter() - start,
-        "feasible": cardinality is None or len(selected) == cardinality,
-        "energy": float(np.real(result.eigenvalue)) + offset,
-    }
+    return EigenSolution(
+        selected=selected,
+        objective=objective(x, mu, sigma, lam),
+        feasible=cardinality is None or len(selected) == cardinality,
+        energy=float(np.real(result.eigenvalue)) + offset,
+    )
