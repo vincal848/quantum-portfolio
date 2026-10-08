@@ -56,10 +56,10 @@ def test_decoded_selection_matches_brute_force(best_index):
     sigma = np.diag(variances)
 
     exact = solvers.brute_force(mu, sigma, lam=1.0)
-    assert exact["selected"] == [best_index]
+    assert exact.selected == [best_index]
 
     # And the bitstring for that selection round-trips.
-    bits = "".join("1" if i in exact["selected"] else "0" for i in range(n))[::-1]
+    bits = "".join("1" if i in exact.selected else "0" for i in range(n))[::-1]
     assert decode(bits, n) == [best_index]
 
 
@@ -86,8 +86,8 @@ def test_higher_risk_aversion_prefers_lower_variance():
 
     low = solvers.brute_force(mu, sigma, lam=0.1, cardinality=1)
     high = solvers.brute_force(mu, sigma, lam=10.0, cardinality=1)
-    assert low["selected"] == [0], "at low risk aversion, take the higher return"
-    assert high["selected"] == [1], "at high risk aversion, take the lower variance"
+    assert low.selected == [0], "at low risk aversion, take the higher return"
+    assert high.selected == [1], "at high risk aversion, take the lower variance"
 
 
 # --- solvers --------------------------------------------------------------------
@@ -104,7 +104,7 @@ def test_brute_force_is_actually_exhaustive():
     got = solvers.brute_force(mu, sigma, lam=0.5, cardinality=3)
     best = min((c for c in itertools.product([0, 1], repeat=n) if sum(c) == 3),
                key=lambda c: objective(c, mu, sigma, 0.5))
-    assert got["selected"] == [i for i, b in enumerate(best) if b == 1]
+    assert got.selected == [i for i, b in enumerate(best) if b == 1]
 
 
 def test_brute_force_respects_cardinality():
@@ -112,7 +112,7 @@ def test_brute_force_respects_cardinality():
     mu = rng.uniform(0.05, 0.2, 7)
     sigma = np.diag(rng.uniform(0.005, 0.02, 7))
     for k in (1, 2, 3, 4):
-        assert len(solvers.brute_force(mu, sigma, 0.5, k)["selected"]) == k
+        assert len(solvers.brute_force(mu, sigma, 0.5, k).selected) == k
 
 
 def test_impossible_cardinality_raises():
@@ -134,8 +134,8 @@ def test_greedy_is_never_better_than_exact():
 
         exact = solvers.brute_force(mu, sigma, 0.5, 3)
         heuristic = solvers.greedy(mu, sigma, 0.5, 3)
-        assert heuristic["objective"] >= exact["objective"] - 1e-12
-        assert len(heuristic["selected"]) == 3
+        assert heuristic.objective >= exact.objective - 1e-12
+        assert len(heuristic.selected) == 3
 
 
 # --- weights --------------------------------------------------------------------
@@ -150,3 +150,13 @@ def test_equal_weights_sum_to_one():
 def test_equal_weights_of_nothing_is_all_zero():
     w = equal_weights([], 4)
     assert w.sum() == pytest.approx(0.0)
+
+
+def test_solvers_return_typed_solutions_without_timing():
+    """Timing belongs to run.py; a solver returns only the answer."""
+    mu = np.array([0.1, 0.2, 0.15])
+    sigma = np.diag([0.01, 0.02, 0.015])
+    for solve in (solvers.brute_force, solvers.greedy):
+        got = solve(mu, sigma, 0.5, 2)
+        assert isinstance(got, solvers.Solution)
+        assert not hasattr(got, "seconds")

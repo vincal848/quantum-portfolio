@@ -50,7 +50,7 @@ def test_ising_encoding_agrees_with_the_objective():
     mu, sigma = toy_problem(6, seed=4)
     exact = solvers.brute_force(mu, sigma, 0.5, cardinality=2)
     viaising = solvers.exact_eigensolver(mu, sigma, 0.5, cardinality=2)
-    assert viaising["selected"] == exact["selected"]
+    assert viaising.selected == exact.selected
 
 
 @pytest.mark.parametrize("seed", [1, 2, 3])
@@ -59,23 +59,23 @@ def test_qaoa_finds_the_exact_optimum_on_small_problems(seed):
     exact = solvers.brute_force(mu, sigma, 0.5, cardinality=2)
     approx = solvers.qaoa(mu, sigma, 0.5, cardinality=2, seed=seed)
 
-    assert approx["feasible"]
-    assert len(approx["selected"]) == 2
-    assert approx["objective"] >= exact["objective"] - 1e-9
-    assert approx["selected"] == exact["selected"]
+    assert approx.feasible
+    assert len(approx.selected) == 2
+    assert approx.objective >= exact.objective - 1e-9
+    assert approx.selected == exact.selected
 
 
 def test_qaoa_respects_the_cardinality_constraint():
     """The constraint is only a penalty, so feasibility has to be checked, not assumed."""
     mu, sigma = toy_problem(6, seed=9)
     result = solvers.qaoa(mu, sigma, 0.5, cardinality=3, seed=9)
-    assert len(result["selected"]) == 3
-    assert result["feasible"]
+    assert len(result.selected) == 3
+    assert result.feasible
 
 
 def test_qaoa_is_reproducible_under_a_fixed_seed():
     mu, sigma = toy_problem(5, seed=2)
     first = solvers.qaoa(mu, sigma, 0.5, cardinality=2, seed=42)
     second = solvers.qaoa(mu, sigma, 0.5, cardinality=2, seed=42)
-    assert first["selected"] == second["selected"]
-    assert first["objective"] == pytest.approx(second["objective"])
+    assert first.selected == second.selected
+    assert first.objective == pytest.approx(second.objective)

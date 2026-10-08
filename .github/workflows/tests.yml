@@ -17,9 +17,23 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-      # The encoding, decoding, objective and metric tests need neither qiskit nor
-      # the network. The QAOA tests skip themselves when qiskit is absent.
       - name: Install
         run: pip install numpy scipy pandas pytest
       - name: Test
-        run: pytest tests -q
+        run: pytest tests -q -m "not slow"
+
+  qaoa:
+    # The QAOA tests need the qiskit simulator, so they get their own job. Installing
+    # requirements.txt means they run rather than skip, so the "45/45 optimal"
+    # claim is exercised on every PR.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: pip install -r requirements-dev.txt
+      - name: Test (slow)
+        run: pytest tests -q -m slow -rs

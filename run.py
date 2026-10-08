@@ -7,8 +7,10 @@
 """
 
 import argparse
+import dataclasses
 import json
 import os
+import time
 
 import numpy as np
 
@@ -26,7 +28,14 @@ CARDINALITY = 3
 RISK_FREE = 0.03
 
 
-def get_moments(synthetic, n_assets=10, seed=128):
+def timed(solver, *args, **kwargs) -> dict:
+    """Run a solver and return its fields plus wall-clock `seconds`."""
+    start = time.perf_counter()
+    solution = solver(*args, **kwargs)
+    return {**dataclasses.asdict(solution), "seconds": time.perf_counter() - start}
+
+
+def get_moments(synthetic: bool, n_assets: int = 10, seed: int = 128):
     if synthetic:
         mu, sigma = datamod.synthetic_moments(n_assets, seed=seed)
         return mu, sigma, ["A%d" % i for i in range(n_assets)]
@@ -37,13 +46,14 @@ def get_moments(synthetic, n_assets=10, seed=128):
 def compare(mu, sigma, lam=LAMBDA, cardinality=CARDINALITY, include_qaoa=True,
             include_eigensolver=False):
     """Every solver on the same problem, scored against the exact optimum."""
-    out = {"brute_force": solvers.brute_force(mu, sigma, lam, cardinality),
-           "greedy": solvers.greedy(mu, sigma, lam, cardinality)}
+    out = {"brute_force": timed(solvers.brute_force, mu, sigma, lam, cardinality),
+           "greedy": timed(solvers.greedy, mu, sigma, lam, cardinality)}
     if include_qaoa:
-        out["qaoa"] = solvers.qaoa(mu, sigma, lam, cardinality)
+        out["qaoa"] = timed(solvers.qaoa, mu, sigma, lam, cardinality)
     if include_eigensolver:
         try:
-            out["exact_eigensolver"] = solvers.exact_eigensolver(mu, sigma, lam, cardinality)
+            out["exact_eigensolver"] = timed(
+                solvers.exact_eigensolver, mu, sigma, lam, cardinality)
         except ImportError:
             pass
 
@@ -88,7 +98,7 @@ def scaling_study(max_assets=12, cardinality=3, lam=LAMBDA, seeds=(1, 2, 3, 4, 5
         for seed in seeds:
             mu, sigma = datamod.synthetic_moments(n, seed=seed)
             exact = solvers.brute_force(mu, sigma, lam, cardinality)
-            q = solvers.qaoa(mu, sigma, lam, cardinality, seed=seed)
+            q = timed(solvers.qaoa, mu, sigma, lam, cardinality, seed=seed)
             hits += int(q["selected"] == exact["selected"])
             ratios.append(metrics.approximation_ratio(q["objective"], exact["objective"]))
             qubits = q["n_qubits"]
@@ -113,9 +123,9 @@ def frontier(mu, sigma, cardinality=CARDINALITY, n_points=20):
     points = []
     for lam in np.linspace(0.1, 20.0, n_points):
         best = solvers.brute_force(mu, sigma, lam, cardinality)
-        w = equal_weights(best["selected"], len(mu))
+        w = equal_weights(best.selected, len(mu))
         s = metrics.summarize(w, mu, sigma, RISK_FREE)
-        points.append({"lambda": float(lam), "selected": best["selected"],
+        points.append({"lambda": float(lam), "selected": best.selected,
                        "return": s["return"], "volatility": s["volatility"],
                        "sharpe": s["sharpe"]})
     return points
