@@ -60,9 +60,9 @@ def annealing(model, sweeps=300, restarts=4, seed=0):
         else:
             x = rng.integers(0, 2, model.n).astype(float)
         e = energy(x)
-        t0 = max(np.mean([abs(energy(_move(x, rng, swap)) - e) for _ in range(20)]), 1e-12)
+        t0 = max(np.mean([abs(energy(move(x, rng, swap)) - e) for _ in range(20)]), 1e-12)
         for step in range(steps):
-            y = _move(x, rng, swap)
+            y = move(x, rng, swap)
             ey = energy(y)
             if ey <= e or rng.random() < np.exp(-(ey - e) / (t0 * 1e-3 ** (step / steps))):
                 x, e = y, ey
@@ -72,7 +72,7 @@ def annealing(model, sweeps=300, restarts=4, seed=0):
     return {"x": best_x, "objective": best}
 
 
-def _move(x, rng, swap):
+def move(x, rng, swap):
     y = x.copy()
     if swap:
         y[rng.choice(np.flatnonzero(x == 1))] = 0
@@ -85,13 +85,13 @@ def _move(x, rng, swap):
 
 # --- mixers ---------------------------------------------------------------------
 
-def _single_qubit(psi, q, U):
+def single_qubit(psi, q, U):
     v = psi.reshape(-1, 2, 2 ** q)          # (higher bits, bit q, lower bits)
     return np.stack([U[0, 0] * v[:, 0] + U[0, 1] * v[:, 1],
                      U[1, 0] * v[:, 0] + U[1, 1] * v[:, 1]], 1).reshape(-1)
 
 
-def _ry(t):
+def ry(t):
     return np.array([[np.cos(t / 2), -np.sin(t / 2)], [np.sin(t / 2), np.cos(t / 2)]])
 
 
@@ -107,7 +107,7 @@ class XMixer:
     def apply(self, psi, beta):
         U = np.array([[np.cos(beta), -1j * np.sin(beta)], [-1j * np.sin(beta), np.cos(beta)]])
         for q in range(self.n):
-            psi = _single_qubit(psi, q, U)
+            psi = single_qubit(psi, q, U)
         return psi
 
 
@@ -123,13 +123,13 @@ class WarmMixer(XMixer):
         psi = np.zeros(2 ** self.n, dtype=complex)
         psi[0] = 1
         for q, t in enumerate(self.t):
-            psi = _single_qubit(psi, q, _ry(t))
+            psi = single_qubit(psi, q, ry(t))
         return psi
 
     def apply(self, psi, beta):
         rz = np.diag([np.exp(1j * beta), np.exp(-1j * beta)])
         for q, t in enumerate(self.t):
-            psi = _single_qubit(psi, q, _ry(t) @ rz @ _ry(-t))
+            psi = single_qubit(psi, q, ry(t) @ rz @ ry(-t))
         return psi
 
 
@@ -181,7 +181,7 @@ def cvar(probs, energies, alpha):
 
 # --- quantum solvers ------------------------------------------------------------
 
-def _setup(model, mixer, ring=True):
+def setup(model, mixer, ring=True):
     """Mixer plus energies, costs and validity for every state it can reach."""
     P = penalty_weight(model)
     if mixer == "xy":
@@ -204,22 +204,22 @@ def qaoa(model, ref, mixer="x", p=3, alpha=1.0, restarts=4, seed=0):
     """Train depth p. Depth 1 from a ramp and random starts; each extra layer starts
     from the last optimum stretched onto one more layer (INTERP, Zhou et al. 2020)."""
     rng = np.random.default_rng(seed)
-    mix, X, cost, valid, E = _setup(model, mixer)
+    mix, X, cost, valid, E = setup(model, mixer)
     loss = lambda t: cvar(np.abs(evolve(E, mix, t[:len(t) // 2], t[len(t) // 2:])) ** 2, E, alpha)
 
     starts = [np.array([0.4, 0.4])] + [rng.uniform(0, np.pi / 2, 2) for _ in range(restarts - 1)]
     best = min((minimize(loss, x0, method="COBYLA", options={"maxiter": 400}) for x0 in starts),
                key=lambda r: r.fun)
     for depth in range(1, p):
-        x0 = np.concatenate([_interp(best.x[:depth]), _interp(best.x[depth:])])
+        x0 = np.concatenate([interp(best.x[:depth]), interp(best.x[depth:])])
         best = minimize(loss, x0, method="COBYLA", options={"maxiter": 400})
 
     half = len(best.x) // 2
     probs = np.abs(evolve(E, mix, best.x[:half], best.x[half:])) ** 2
-    return _read_out(ref, X, cost, valid, probs, rng)
+    return read_out(ref, X, cost, valid, probs, rng)
 
 
-def _interp(params):
+def interp(params):
     p = len(params)
     padded = np.concatenate([[0], params, [0]])
     return np.array([(i * padded[i] + (p - i) * padded[i + 1]) / p for i in range(p + 1)])
@@ -229,17 +229,17 @@ def adiabatic(model, ref, mixer="x", total_time=20.0, steps=40, seed=0):
     """Slow linear sweep from the mixer to the cost: QAOA with fixed angles,
     gamma = s dt and beta = -(1 - s) dt. The XY version uses every pair, because
     that mixer's ground state is the Dicke state the circuit starts in."""
-    mix, X, cost, valid, E = _setup(model, mixer, ring=False)
+    mix, X, cost, valid, E = setup(model, mixer, ring=False)
     dt = total_time / steps
     s = (np.arange(steps) + 0.5) / steps
     betas = -(1 - s) * dt
     if mixer == "xy":
         betas *= 2 / model.n          # every pair hops; keep dt comparable to the X case
     probs = np.abs(evolve(E, mix, s * dt, betas)) ** 2
-    return _read_out(ref, X, cost, valid, probs, np.random.default_rng(seed))
+    return read_out(ref, X, cost, valid, probs, np.random.default_rng(seed))
 
 
-def _read_out(ref, X, cost, valid, probs, rng, shots=1024):
+def read_out(ref, X, cost, valid, probs, rng, shots=1024):
     """Best valid shot out of 1024, plus exact P(valid) and P(optimal)."""
     probs = probs / probs.sum()
     shots = rng.choice(len(probs), shots, p=probs)
