@@ -1,5 +1,0 @@
--r requirements.txt
-pytest>=8
-
-# Cross-check of the statevector engine against Qiskit's QAOAAnsatz
-qiskit>=2.0

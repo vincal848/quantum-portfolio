@@ -1,7 +1,5 @@
 numpy>=2.0
 scipy>=1.11
 matplotlib>=3.8
-
-# Real-price data only (python run.py --real)
-pandas>=2.0
-yfinance>=0.2.40
+yfinance>=0.2.40   # only for python run.py --real
+pytest>=8
