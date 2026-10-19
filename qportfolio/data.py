@@ -1,14 +1,13 @@
-"""Market data: daily returns in, annualized moments out.
+"""Market data. Daily returns go in; the moments the models need come out.
 
-Two sources share one `Market` shape:
+synthetic_market builds a seeded factor-model market: five sectors, a market factor
+that occasionally crashes, and a few right-skewed "lottery" names. It needs no
+network, so every number in the README reproduces anywhere.
 
-* `synthetic_market` - a factor model with sectors, a fat left tail in the market
-  factor and a few right-skewed "lottery" names. Deterministic under a seed and
-  needs no network, so every number in the README reproduces anywhere.
-* `real_market`      - adjusted closes from Yahoo Finance, cached to CSV.
+real_market downloads adjusted closes from Yahoo Finance and caches them to CSV.
 
-The models need more than mean and covariance: sectors for the caps, a benchmark
-for tracking, and third co-moments for the skew-aware model, so they all live here.
+Besides mean and covariance, the models use sectors (rebalance), a benchmark
+(tracking) and third co-moments (skew_aware), so a Market carries all of them.
 """
 
 from __future__ import annotations
@@ -58,11 +57,10 @@ class Market:
 
     @property
     def coskewness(self) -> np.ndarray:
-        """Third central co-moment tensor of DAILY returns.
+        """Third central co-moment tensor of daily returns.
 
-        Left at the daily horizon on purpose: annualizing a third moment for iid days
-        shrinks the skewness by sqrt(252), which would erase exactly the crash and
-        lottery behaviour the skew-aware model is meant to see.
+        Kept daily on purpose. For independent days, annualizing shrinks skewness by
+        sqrt(252), which would wash out the crashes and jumps skew_aware looks for.
         """
         d = self.returns - self.returns.mean(axis=0)
         return np.einsum("ti,tj,tk->ijk", d, d, d) / len(d)
@@ -85,7 +83,7 @@ def synthetic_market(n: int = 12, seed: int = 7, days: int = 3 * TRADING_DAYS) -
     sectors = [SECTORS[i % len(SECTORS)] for i in range(n)]
     sector_id = np.array([SECTORS.index(s) for s in sectors])
 
-    # Market factor: mostly calm, occasionally a crash day. Negative skew.
+    # Market factor: calm most days, a crash about 3% of the time.
     crash = rng.random(days) < 0.03
     market = np.where(crash, rng.normal(-0.025, 0.02, days), rng.normal(0.0009, 0.009, days))
     sector_f = rng.normal(0, 0.007, (days, len(SECTORS)))
@@ -96,7 +94,7 @@ def synthetic_market(n: int = 12, seed: int = 7, days: int = 3 * TRADING_DAYS) -
     alpha = rng.uniform(-0.0003, 0.0006, n)
     eps = rng.normal(0, 1, (days, n)) * idio
 
-    # A few lottery names: rare large up-moves, positive skew.
+    # Lottery names: a rare 4-10% jump up, with the drift lowered to pay for it.
     lottery = rng.random(n) < 0.3
     jumps = (rng.random((days, n)) < 0.015) * rng.uniform(0.04, 0.10, (days, n))
     eps = eps + jumps * lottery - (0.015 * 0.07) * lottery

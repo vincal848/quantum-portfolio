@@ -60,7 +60,7 @@ def test_dicke_and_warm_start_initial_states():
 
 def test_warm_start_mixer_has_the_initial_state_as_eigenstate():
     """The initial state is an eigenstate of the warm mixer, so the mixer alone only
-    changes its global phase - the warm-start analogue of |+> under X."""
+    changes its global phase, the same way |+> behaves under the X mixer."""
     warm = WarmStartMixer(3, [0.3, 0.6, 0.4])
     psi = warm.initial()
     out = warm.apply(psi, 0.8)
