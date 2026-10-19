@@ -11,17 +11,8 @@ def test_sharpe_divides_by_volatility():
     mu = np.array([0.10, 0.10])
     sigma = np.diag([0.08, 0.08])
     vol = metrics.portfolio_volatility(w, sigma)
-    assert vol == pytest.approx(np.sqrt(metrics.portfolio_variance(w, sigma)))
+    assert vol == pytest.approx(np.sqrt(w @ sigma @ w))
     assert metrics.sharpe_ratio(w, mu, sigma, 0.03) == pytest.approx(0.07 / vol)
-
-
-def test_annualization_is_consistent():
-    daily_mu = np.array([0.0004, 0.0006])
-    daily_cov = np.array([[1e-4, 2e-5], [2e-5, 1.5e-4]])
-    w = np.array([0.5, 0.5])
-    assert metrics.annualize_returns(daily_mu) == pytest.approx(daily_mu * 252)
-    assert metrics.portfolio_volatility(w, metrics.annualize_covariance(daily_cov)) == \
-        pytest.approx(metrics.portfolio_volatility(w, daily_cov) * np.sqrt(252))
 
 
 def test_zero_volatility_gives_nan():

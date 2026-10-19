@@ -31,10 +31,6 @@ class Result:
     seconds: float
     info: dict = field(default_factory=dict)
 
-    @property
-    def bitstring(self) -> str:
-        return "".join(str(int(b)) for b in self.x)[::-1]
-
 
 @dataclass
 class Reference:
@@ -166,7 +162,7 @@ class _Landscape:
 
 
 def qaoa(problem: Problem, ref: Reference, p=3, mixer="x", alpha=1.0, restarts=4,
-         shots=1024, maxiter=400, seed=0, topology="ring", label=None) -> Result:
+         shots=1024, maxiter=400, seed=0, label=None) -> Result:
     """Train a depth-p QAOA circuit and sample it.
 
     p = 1 is trained from a small ramp and from random starting points. Each deeper
@@ -175,7 +171,7 @@ def qaoa(problem: Problem, ref: Reference, p=3, mixer="x", alpha=1.0, restarts=4
     """
     start = time.perf_counter()
     rng = np.random.default_rng(seed)
-    mix, preserve = _make_mixer(problem, mixer, topology)
+    mix, preserve = _make_mixer(problem, mixer)
     land = _Landscape(problem, mix, preserve, ref)
 
     def loss(theta):
@@ -271,7 +267,6 @@ def _read_out(problem, ref, land, probs, shots, rng) -> Result:
         "p_optimal": p_optimal,
         "amplification": p_optimal * ref.n_feasible / len(ref.optimal_states),
         "expected_ratio_given_feasible": expected_ratio,
-        "most_likely_feasible": bool(land.feasible[int(np.argmax(probs))]),
         "n_qubits": problem.n_qubits,
         "hilbert_dim": len(land.states),
     })

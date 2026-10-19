@@ -10,7 +10,7 @@ is Qiskit's little-endian convention, where qubit 0 is the rightmost character.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from itertools import combinations
 from typing import Callable
 
@@ -27,25 +27,10 @@ def bit_table(n: int, states=None) -> np.ndarray:
     return ((states[:, None] >> np.arange(n)) & 1).astype(np.int8)
 
 
-def to_index(x) -> int:
-    return int(sum(int(b) << i for i, b in enumerate(x)))
-
-
-def to_bitstring(x) -> str:
-    return "".join(str(int(b)) for b in x)[::-1]
-
-
-def from_bitstring(bits: str) -> np.ndarray:
-    return np.array([int(c) for c in reversed(bits)], dtype=np.int8)
-
-
 def weight_k_states(n: int, k: int) -> np.ndarray:
     """Every integer state with exactly k ones, in ascending order."""
-    if n <= MAX_ENUMERATION_QUBITS:
-        states = np.arange(2 ** n, dtype=np.int64)
-        return states[np.bitwise_count(states) == k]
-    found = [sum(1 << i for i in c) for c in combinations(range(n), k)]
-    return np.array(sorted(found), dtype=np.int64)
+    states = np.arange(2 ** n, dtype=np.int64)
+    return states[np.bitwise_count(states) == k]
 
 
 @dataclass
@@ -200,9 +185,7 @@ class Problem:
     labels: list[str]
     description: str = ""
     hamming_weight: int | None = None
-    variable_labels: list[str] | None = None
     objective_label: str = "objective"
-    meta: dict = field(default_factory=dict)
 
     @property
     def n_qubits(self) -> int:

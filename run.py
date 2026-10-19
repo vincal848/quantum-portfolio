@@ -12,7 +12,7 @@ import os
 
 import numpy as np
 
-from qportfolio import data, experiments, models, solvers
+from qportfolio import data, experiments, models
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS = os.path.join(HERE, "results")
@@ -45,16 +45,7 @@ def main():
                          "real": args.real, "seed": args.seed, "p": args.p}}
 
     if args.model:
-        problem = next(p for p in experiments.default_problems(market)
-                       if p.name == args.model)
-        exact, ref = solvers.exact(problem)
-        rows = [experiments._row(problem, ref, exact)]
-        for label, kw in experiments.QUANTUM:
-            if kw["mixer"] == "xy" and problem.hamming_weight is None:
-                continue
-            rows.append(experiments._row(problem, ref, solvers.qaoa(
-                problem, ref, p=args.p, label=label, **kw)))
-        experiments.print_rows(problem, ref, rows)
+        experiments.model_zoo(market, p=args.p, only=args.model)
         return
 
     print("\n== model zoo ==")

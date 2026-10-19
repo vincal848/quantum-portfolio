@@ -47,8 +47,7 @@ def selection(market: Market, k=3, lam=1.0, penalty_scale=1.0) -> Problem:
     return Problem(
         "selection", cost, [_hold_exactly(n, k, cost, penalty_scale)], _equal_weights(k),
         market.names, "Mean-variance selection of %d of %d assets" % (k, n),
-        hamming_weight=k, objective_label="-return + %.2g * variance" % lam,
-        meta={"k": k, "lam": lam})
+        hamming_weight=k, objective_label="-return + %.2g * variance" % lam)
 
 
 def allocation(market: Market, lam=1.0, bits=2, budget=4, penalty_scale=1.0) -> Problem:
@@ -70,12 +69,10 @@ def allocation(market: Market, lam=1.0, bits=2, budget=4, penalty_scale=1.0) -> 
     units_per_bit = A.sum(axis=0) * budget
     budget_rule = Constraint("budget", equality_penalty(units_per_bit, budget, nq),
                              safe_penalty_weight(cost, penalty_scale))
-    labels = ["%s.b%d" % (market.names[i], j) for i in range(n) for j in range(bits)]
     return Problem(
         "allocation", cost, [budget_rule], lambda x: A @ np.asarray(x, dtype=float),
         market.names, "Integer allocation in 1/%d units, %d bits per asset" % (budget, bits),
-        variable_labels=labels, objective_label="-return + %.2g * variance" % lam,
-        meta={"bits": bits, "budget": budget, "lam": lam, "A": A})
+        objective_label="-return + %.2g * variance" % lam)
 
 
 def tracking(market: Market, k=4, penalty_scale=1.0) -> Problem:
@@ -90,7 +87,7 @@ def tracking(market: Market, k=4, penalty_scale=1.0) -> Problem:
     return Problem(
         "tracking", cost, [_hold_exactly(n, k, cost, penalty_scale)], _equal_weights(k),
         market.names, "Track the cap-weighted benchmark with %d names" % k,
-        hamming_weight=k, objective_label="tracking variance", meta={"k": k})
+        hamming_weight=k, objective_label="tracking variance")
 
 
 def long_short(market: Market, lam=1.0, penalty_scale=1.0) -> Problem:
@@ -116,8 +113,7 @@ def long_short(market: Market, lam=1.0, penalty_scale=1.0) -> Problem:
         "long_short", cost, [_hold_exactly(n, n // 2, cost, penalty_scale)],
         lambda x: (2 * np.asarray(x, dtype=float) - 1) / n, market.names,
         "Dollar-neutral long/short across %d assets (balanced MaxCut)" % n,
-        hamming_weight=n // 2, objective_label="-return + %.2g * variance" % lam,
-        meta={"lam": lam})
+        hamming_weight=n // 2, objective_label="-return + %.2g * variance" % lam)
 
 
 def correlation_edges(market: Market, threshold):
@@ -142,8 +138,7 @@ def diversified(market: Market, k=3, lam=1.0, threshold=0.35, penalty_scale=1.0)
         "diversified", cost, rules, _equal_weights(k), market.names,
         "Selection of %d with no pair correlated above %.2f (%d edges)"
         % (k, threshold, len(edges)),
-        hamming_weight=k, objective_label="-return + %.2g * variance" % lam,
-        meta={"k": k, "lam": lam, "threshold": threshold, "edges": edges})
+        hamming_weight=k, objective_label="-return + %.2g * variance" % lam)
 
 
 def rebalance(market: Market, current, k=4, lam=1.0, cost_per_trade=0.01, sector_cap=2,
@@ -175,9 +170,7 @@ def rebalance(market: Market, current, k=4, lam=1.0, cost_per_trade=0.01, sector
         "rebalance", cost, rules, _equal_weights(k), market.names,
         "Rebalance from %s with %.0f bp per trade, <= %d per sector"
         % (held, cost_per_trade * 1e4, sector_cap),
-        hamming_weight=k, objective_label="-return + variance + turnover cost",
-        meta={"k": k, "lam": lam, "current": x0.astype(int).tolist(),
-              "cost_per_trade": cost_per_trade, "sector_cap": sector_cap})
+        hamming_weight=k, objective_label="-return + variance + turnover cost")
 
 
 def skew_aware(market: Market, k=3, lam=1.0, kappa=1.0, penalty_scale=1.0) -> Problem:
@@ -199,8 +192,7 @@ def skew_aware(market: Market, k=3, lam=1.0, kappa=1.0, penalty_scale=1.0) -> Pr
     return Problem(
         "skew_aware", cost, [_hold_exactly(n, k, cost, penalty_scale)], _equal_weights(k),
         market.names, "Mean-variance-skewness selection of %d (kappa=%g)" % (k, kappa),
-        hamming_weight=k, objective_label="-return + variance - %g * skew" % kappa,
-        meta={"k": k, "lam": lam, "kappa": kappa})
+        hamming_weight=k, objective_label="-return + variance - %g * skew" % kappa)
 
 
 def continuous_markowitz(market: Market, lam=1.0, max_weight=1.0):

@@ -71,7 +71,7 @@ def test_long_short_needs_an_even_universe(market):
 
 def test_diversified_forbids_correlated_pairs(market):
     p = models.diversified(market, k=3, threshold=0.3)
-    edges = p.meta["edges"]
+    edges = models.correlation_edges(market, 0.3)
     assert edges, "threshold chosen so the constraint binds"
     for x in feasible_bits(p):
         assert not any(x[i] and x[j] for i, j in edges)

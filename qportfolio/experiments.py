@@ -43,9 +43,12 @@ def _row(problem, ref, result):
     }
 
 
-def model_zoo(market: Market, p: int = 3, seed: int = 0, verbose: bool = True) -> dict:
+def model_zoo(market: Market, p: int = 3, seed: int = 0, verbose: bool = True,
+              only: str | None = None) -> dict:
     out = {"problems": [], "rows": []}
     for problem in default_problems(market):
+        if only and problem.name != only:
+            continue
         exact, ref = solvers.exact(problem)
         out["problems"].append({
             "model": problem.name, "description": problem.description,

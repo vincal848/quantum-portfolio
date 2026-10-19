@@ -6,8 +6,7 @@ import numpy as np
 import pytest
 
 from qportfolio.problem import (Polynomial, at_most_one_penalty, at_most_two_penalty,
-                                bit_table, equality_penalty, from_bitstring, pair_penalty,
-                                to_bitstring, to_index, weight_k_states)
+                                bit_table, equality_penalty, pair_penalty, weight_k_states)
 
 
 def random_poly(n, seed, cubic=False):
@@ -27,9 +26,7 @@ def direct(poly, x):
 def test_bit_order_is_little_endian():
     assert list(bit_table(4, [1])[0]) == [1, 0, 0, 0]
     assert list(bit_table(4, [8])[0]) == [0, 0, 0, 1]
-    assert to_bitstring([1, 0, 0, 0]) == "0001"          # qubit 0 is rightmost
-    assert list(from_bitstring("0001")) == [1, 0, 0, 0]
-    assert to_index([0, 1, 1]) == 6
+    assert list(bit_table(3, [6])[0]) == [0, 1, 1]
 
 
 @pytest.mark.parametrize("cubic", [False, True])

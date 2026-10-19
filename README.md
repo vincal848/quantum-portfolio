@@ -33,7 +33,7 @@ picture into an exact MaxCut formulation.
   24 to 45 times better than random on five of its six models. Annealed slowly,
   it reaches 99%.
 - Every number here comes from one command, `python run.py --all`, and is saved
-  in `results/results.json`. The 55 tests run in about 10 seconds.
+  in `results/results.json`. The 54 tests run in about 10 seconds.
 
 ## Contents
 
@@ -424,7 +424,7 @@ python run.py --real                     # real prices for 12 tickers, 2020-2022
 python run.py --p 5                      # deeper circuits
 
 pip install -r requirements-dev.txt
-pytest tests -q                          # 55 tests, ~10 s
+pytest tests -q                          # 54 tests, ~10 s
 pytest tests -q -m "not slow"            # skip the Qiskit cross-check
 ```
 
