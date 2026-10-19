@@ -1,191 +1,191 @@
-# Quantum Portfolio Selection: QAOA against an exact solver
+# Quantum Portfolio Optimization: seven models, one Ising format
 
 [![tests](https://github.com/vincal848/quantum-portfolio/actions/workflows/tests.yml/badge.svg)](https://github.com/vincal848/quantum-portfolio/actions/workflows/tests.yml)
 
-This started as an extension of a project in *PHYS 4315: Introduction to Quantum
-Computing*, cross-listed as *ECE 5332*. Most of the background came from Thomas
-Wong's ***Introduction to Classical and Quantum Computing***, with sections of
-Nielsen and Chuang. The idea was to treat asset selection as a MaxCut-like problem
-on a graph — nodes are assets, edges carry covariance — and solve it with QAOA. My
-notes on the classical/quantum comparison, QAOA and adiabatic quantum computing are
-in [docs/BACKGROUND.md](docs/BACKGROUND.md).
+Seven portfolio problems written as binary polynomials (QUBO and HUBO), so each
+one becomes a diagonal Ising Hamiltonian. They are solved with six quantum
+algorithms and two classical baselines on an exact statevector simulator.
 
-I have rebuilt it, and the honest result is not the one the original implied.
-**QAOA finds the exact optimum on every problem tested — 45 out of 45 — and takes
-about 20,000 times longer than simply enumerating every subset.** A greedy classical
-pass matches it in microseconds. That is the expected outcome at simulable sizes, and
-saying so is more useful than a result that quietly avoids the comparison.
+This grew out of a project in *PHYS 4315: Introduction to Quantum Computing*
+(cross-listed as *ECE 5332*), built on Thomas Wong's ***Introduction to Classical
+and Quantum Computing*** and parts of Nielsen and Chuang. The starting idea was to
+treat assets as nodes in a graph, with covariance on the edges, and solve the
+selection with QAOA. My notes on QAOA and adiabatic quantum computing are in
+[docs/BACKGROUND.md](docs/BACKGROUND.md).
 
-I also found that the original was reporting **the wrong assets**, because Qiskit's
-bit ordering is the reverse of how the code read it.
+## Headline results
 
-![QAOA against the exact optimum as the problem grows](docs/img/scaling.png)
+![P(optimal) relative to random, by model and solver](docs/img/models.png)
 
-## At a glance
+- **The XY mixer does the work.** Penalty-based QAOA (`qaoa_x`) lands on the
+  optimal portfolio *less* often than picking a valid portfolio at random (0.3–0.9×).
+  The constraint-preserving XY mixer never produces an invalid portfolio and
+  concentrates 24–45× above random at p = 3 on five of the six models it applies
+  to. Its adiabatic version reaches 44–107×.
+- **The advantage grows with size.** From 6 to 20 qubits, XY-QAOA stays 4–90× above
+  random, while X-mixer QAOA slides from 0.9× to 0.5×. The XY circuit lives in the
+  C(n,k)-dimensional feasible subspace, which is why 20 qubits simulates in
+  seconds.
+- **Adiabatic evolution converges.** With the XY mixer, P(optimal) climbs from 10% to
+  99% as anneal time increases. With the X mixer it stays under 1%, because the
+  penalty term dominates the energy scale and squeezes the gap.
+- **Warm starts help, CVaR doesn't.** Warm-start QAOA is competitive with XY on
+  several models. CVaR-QAOA improves the best shot but not the probability of
+  the optimum.
+- Every model's penalized ground state is its true feasible optimum. A test checks
+  this for every model, so the encodings are correct.
 
-| | |
-|---|---|
-| **Problem** | Cardinality-constrained mean-variance selection: minimize `−μ·x + λ x'Σx` s.t. `Σx = k`, `x ∈ {0,1}ⁿ` |
-| **Solvers** | Brute force (exact reference), greedy, QAOA on a statevector simulator, exact Ising diagonalization |
-| **Data** | 10 US equities, 2020-01-01 to 2023-01-01, annualized moments; or synthetic |
-| **Result** | QAOA found the optimum in 45/45 trials, n = 4 to 12 |
-| **Cost** | QAOA 11.7s vs brute force 0.0006s on the 10-asset problem — about 20,000× |
-| **Stack** | Python, Qiskit 2.x, SciPy, pandas |
+## The models
 
-## Results
-
-**10 assets, pick 3, λ = 0.5, real prices, annualized:**
-
-| solver | selected | objective | found optimum? | seconds |
+| model | what it optimizes | qubits | order | constraint handling |
 |---|---|---|---|---|
-| brute force | TSLA, XOM, PG | −0.678774 | — (reference) | 0.0006 |
-| greedy | TSLA, XOM, PG | −0.678774 | yes | 0.0001 |
-| QAOA | TSLA, XOM, PG | −0.678774 | yes | 11.69 |
-| exact Ising diagonalization | TSLA, XOM, PG | −0.678774 | yes | 0.011 |
+| `selection` | equal-weight mean-variance, k of n | n | 2 | hold exactly k → XY mixer |
+| `allocation` | unequal weights in 1/4 units | n × 2 | 2 | units sum to budget → penalty |
+| `tracking` | tracking variance vs. a cap-weighted benchmark | n | 2 | exactly k → XY mixer |
+| `long_short` | dollar-neutral long/short (balanced **MaxCut**) | n | 2 | n/2 long → XY mixer |
+| `diversified` | selection with no pair correlated above ρ (**independent set**) | n | 2 | XY + pair penalty |
+| `rebalance` | selection plus turnover cost, ≤ 2 names per sector | n | **3** | XY + cubic penalty |
+| `skew_aware` | mean-variance-**skewness** (coskewness tensor) | n | **3** | exactly k → XY mixer |
 
-All four agree, giving 38.57% annualized return at 32.61% volatility, Sharpe 1.091.
+A few of these deserve a sentence each:
 
-**Does QAOA keep finding the optimum as the problem grows?** Five random problems at
-each size, cardinality 3:
+- **`long_short` is the graph idea made exact.** With s = ±1 for long/short, the
+  portfolio variance s'Σs equals a constant minus 4 × (covariance-weighted cut
+  between the books). Minimizing risk *is* weighted MaxCut on the covariance graph,
+  and dollar neutrality makes it a balanced cut.
+- **`rebalance` and `skew_aware` are HUBOs.** "At most 2 per sector" becomes one cubic
+  term per triple, with no slack qubits. Coskewness gives three-body Z terms. The
+  phase layer of QAOA applies these as easily as two-body terms, while a QUBO solver
+  would need auxiliary variables for them.
+- **`allocation` buys real weights with qubits.** Two bits per asset encode 0–3
+  units. This is the one model the XY mixer can't help, because its constraint is a
+  weighted sum rather than a count.
 
-| assets | qubits | found optimum | mean approximation ratio | mean seconds |
-|---|---|---|---|---|
-| 4 | 4 | 5/5 | 1.0000 | 2.5 |
-| 6 | 6 | 5/5 | 1.0000 | 4.6 |
-| 8 | 8 | 5/5 | 1.0000 | 5.7 |
-| 10 | 10 | 5/5 | 1.0000 | 14.7 |
-| 11 | 11 | 5/5 | 1.0000 | 31.1 |
-| 12 | 12 | 5/5 | 1.0000 | 40.2 |
+Results on the 12-asset synthetic market (5 sectors), p = 3:
 
-**45 out of 45.** QAOA is correct here. It is also the slowest thing in the table by
-four orders of magnitude, and the gap widens with every qubit, because simulating the
-circuit costs `2ⁿ` classically. The exact answer is free at these sizes.
+| model | optimum | XY-QAOA P(opt) | warm P(opt) | X-QAOA P(opt) | adiabatic XY P(opt) |
+|---|---|---|---|---|---|
+| selection | HEA2, STA4, STA9 | 0.207 | 0.135 | 0.003 | 0.421 |
+| allocation | STA4 75%, HEA2 25% | – | 0.041 | 0.006 | – |
+| tracking | ENE1, FIN3, TEC10, STA9 | 0.050 | 0.022 | 0.001 | 0.217 |
+| long_short | 5 long / 5 short | 0.094 | 0.099 | 0.003 | 0.283 |
+| diversified | HEA2, STA4, ENE6 | 0.019 | 0.001 | 0.003 | 0.018 |
+| rebalance | HEA2, STA4, TEC10, STA9 | 0.092 | 0.107 | 0.002 | 0.093 |
+| skew_aware | ENE1, STA4, STA9 | 0.151 | 0.020 | 0.003 | 0.276 |
 
-That is not a failure of QAOA — it is the point. A quantum heuristic can only be
-interesting where classical exhaustive search is not, which is beyond what a
-simulator can reach. Any portfolio result at n = 12 that claims a quantum advantage
-is claiming something these numbers directly contradict.
+All solvers found the optimum within 1024 shots on every model except two cases:
+warm-start on `diversified` and adiabatic-X on `skew_aware`. `diversified` is the
+hardest case for every quantum method, because its correlation constraint still has
+to be a penalty even inside the XY subspace. Simulated annealing solves all seven
+in under a second; at these sizes the classical baseline is not under pressure.
 
-**Frontier over risk aversion.** Sweeping λ from 0.1 to 20 moves the selection from
-TSLA/XOM/NVDA at 49.7% return and 43.2% volatility to GOOG/JNJ/PG at 12.7% and
-22.1% — growth names giving way to defensives as risk aversion rises. That behaviour
-is what says the objective and the moment estimates are wired up correctly.
+Adding skewness changes the answer. At κ = 1 the optimizer gives up 8 points of
+return to swap HEA2 for ENE1, a right-skewed "lottery" name. The portfolio's daily
+skewness rises from 0.00 to 0.25.
 
-![Frontier over risk aversion](docs/img/frontier.png)
+## Depth, annealing time, scaling
+
+![QAOA depth](docs/img/depth.png)
+
+On the 12-asset selection problem, the XY mixer's P(optimal) rises steadily with
+depth, from 5% at p = 1 to 36% at p = 6. The X mixer only learns to satisfy the
+constraint (41% → 94% valid) and never finds the optimum (under 0.5%).
+
+![Adiabatic anneal time](docs/img/anneal.png)
+
+![Scaling to 20 qubits](docs/img/scaling.png)
+
+Lowering the penalty weight on the X mixer helps a little: P(optimal) goes from
+0.3% to 1.9% at 1/20 of the safe weight, and the ground state stays correct. It
+doesn't close the gap. Removing the penalty with a mixer is what does.
 
 ## How it works
 
 ```mermaid
 flowchart LR
-    D[prices<br/>yfinance or synthetic] --> M[annualized<br/>mu and Sigma]
-    M --> P[objective<br/>-mu.x + lambda x'Sigma x]
-    P --> QP[QuadraticProgram<br/>+ cardinality constraint]
-    QP --> IS[QUBO to Ising<br/>constraint becomes a penalty]
-    IS --> Q[QAOA ansatz<br/>COBYLA, 3 restarts]
-    Q --> S[sample bitstrings]
-    S --> DEC[decode<br/>LITTLE-ENDIAN]
-    P --> BF[brute force<br/>all 2^n subsets]
-    P --> G[greedy]
-    DEC --> C{score every solver<br/>on the SAME objective}
-    BF --> C
-    G --> C
-    C --> R[approximation ratio,<br/>hit rate, seconds]
+    R[daily returns<br/>synthetic or yfinance] --> M[mu, Sigma,<br/>coskewness, sectors]
+    M --> P[model → Problem<br/>cost polynomial + constraints]
+    P --> H[diagonal Hamiltonian<br/>cost + penalties]
+    P --> XY[XY subspace<br/>C n,k states]
+    H --> Q1[QAOA X / warm / CVaR<br/>adiabatic X]
+    XY --> Q2[QAOA XY<br/>adiabatic XY]
+    P --> C[exact enumeration<br/>simulated annealing]
+    Q1 --> S[exact distribution:<br/>P valid, P optimal, best of 1024 shots]
+    Q2 --> S
+    C --> S
 ```
 
-QAOA is built directly on Qiskit 2 primitives — `QAOAAnsatz`,
-`StatevectorEstimator`, `StatevectorSampler` — with SciPy's COBYLA as the classical
-optimizer, restarted from three random points because the energy landscape is
-non-convex. It does not use `qiskit-algorithms`, which no longer works with Qiskit 2.
-
-## Decisions
-
-- **Brute force is the reference, not another heuristic.** At n ≤ 20 the exact
-  optimum is cheap, so there is no reason to score an approximate method against
-  anything softer.
-- **Greedy is included deliberately.** "QAOA beat random" is not a finding. The
-  question is whether it beats what someone would actually reach for.
-- **Equality rather than inequality on the cardinality constraint.** `Σx <= k` needs
-  slack variables and the converter spends real qubits on them — a 10-asset problem
-  becomes 12 qubits. `Σx == k` stays at 10. On a simulator that is the difference
-  between running and not.
-- **Feasibility is checked, never assumed.** The constraint is only a penalty in the
-  Hamiltonian, so nothing stops an infeasible bitstring being the most-sampled one.
-  The solver takes the best *feasible* sample and separately records whether the top
-  sample was feasible.
-- **The objective is defined in one place.** Every solver is scored with
-  `portfolio.objective`, so none can look good by optimizing something subtly
-  different.
-- **Everything is seeded.** Two runs give the same selection.
+- **One format.** A `Problem` is a cost polynomial (linear, quadratic, cubic) plus
+  constraints, each a non-negative polynomial that is zero exactly when satisfied.
+  Classical solvers evaluate it; quantum solvers turn it into a phase.
+- **Exact simulation.** `qportfolio/quantum.py` is a small numpy statevector engine.
+  Because the cost is diagonal, each cost layer is just an elementwise phase.
+  `tests/test_qiskit.py` checks it against Qiskit's `QAOAAnsatz` to 1e-10 on
+  the quadratic models, which pins bit order and sign conventions.
+- **Parameter training.** COBYLA at p = 1 from a ramp plus random restarts, then
+  INTERP (Zhou et al.) to grow one layer at a time, so the loss never gets worse
+  with depth.
+- **Metrics.** P(optimal) and P(valid) come from the exact output distribution, with
+  no shot noise. "× random" is P(optimal) divided by the chance of picking the
+  optimum uniformly from the valid portfolios.
 
 ## Quick start
 
 ```bash
 pip install -r requirements.txt
+python run.py                    # all seven models, every solver (~90 s)
+python run.py --all              # plus depth, anneal, penalty, scaling, frontier, figures
+python run.py --model long_short # one model
+python run.py --real             # real prices for 12 tickers (needs network)
+
+pip install -r requirements-dev.txt
+pytest tests -q                  # 55 tests, ~8 s, includes the Qiskit cross-check
 ```
 
-```bash
-python run.py --synthetic --no-figures     # no network needed
-```
+```python
+from qportfolio import data, models, solvers
 
-```
-covariance positive semi-definite: True
-
-10 assets, pick 3, lambda=0.5, risk-free 3%
-solver            selected                       objective    approx  optimal?  seconds
-brute_force       A0, A6, A7                     -0.478669    1.0000       yes    0.001
-greedy            A0, A6, A7                     -0.478669    1.0000       yes    0.000
-qaoa              A0, A6, A7                     -0.478669    1.0000       yes    5.567
-exact_eigensolver A0, A6, A7                     -0.478669    1.0000       yes    0.013
-```
-
-Other options:
-
-```bash
-python run.py                   # real prices for 10 tickers
-python run.py --all             # frontier and scaling study, writes figures
-python run.py --scaling         # does QAOA still find the optimum as n grows?
-python run.py --no-qaoa         # classical solvers only, instant
-
-pytest tests -q                 # 32 tests
-pytest tests -q -m "not slow"   # 25 of them, no qiskit needed
+market = data.synthetic_market(12, seed=7)
+problem = models.tracking(market, k=4)
+best, ref = solvers.exact(problem)
+q = solvers.qaoa(problem, ref, p=3, mixer="xy")
+print(problem.describe(q.x), q.info["p_optimal"], q.info["amplification"])
 ```
 
 ## Repository guide
 
-| Path | Contents |
+| path | contents |
 |---|---|
-| `portfolio.py` | The objective, the QuadraticProgram, the Ising conversion, and the little-endian decode |
-| `solvers.py` | Brute force, greedy, QAOA, exact Ising diagonalization — one shape each |
-| `metrics.py` | Return, volatility, Sharpe and annualization, on a consistent basis |
-| `data.py` | Price loading with caching, moment estimation, PSD repair |
-| `run.py` | The comparison, the frontier, the scaling study, `results/` and figures |
-| `tests/` | 32 tests |
-| `docs/BACKGROUND.md` | My original write-up: classical vs quantum, QAOA, adiabatic computing |
-| `legacy/` | The three original scripts, annotated. None run on current dependencies |
+| `qportfolio/problem.py` | polynomials, penalties, Ising conversion, bit conventions |
+| `qportfolio/models.py` | the seven models |
+| `qportfolio/quantum.py` | statevector engine: X, XY and warm-start mixers, CVaR |
+| `qportfolio/solvers.py` | exact, simulated annealing, QAOA variants, adiabatic |
+| `qportfolio/qiskit_backend.py` | the same circuit in Qiskit, for cross-checks and hardware |
+| `qportfolio/data.py` | synthetic factor-model market, Yahoo loader, moments |
+| `qportfolio/experiments.py` | every study in this README |
+| `run.py` | CLI, `results/results.json`, figures |
+| `legacy/` | the original coursework scripts |
 
-![Selection by solver](docs/img/allocation.png)
+## Next models
 
-## Future interests
-
-- **A problem size where the comparison gets interesting.** Everything here is
-  solvable exactly, so nothing QAOA does can be surprising. Either move to hardware,
-  or to a structured problem where the classical baseline genuinely struggles.
-- **Warm-start QAOA and CVaR objectives**, both reported to help on constrained
-  portfolio problems, and which would give the parameter optimization something
-  better than random restarts.
-- **Constraint handling without a penalty.** An XY mixer preserves the number of
-  holdings by construction, so the search never leaves the feasible set and no
-  post-hoc filtering is needed.
-- **Compare against a real integer-programming solver** rather than brute force, so
-  the classical baseline is one a practitioner would defend.
-- **Quantum coins and quantum walks**, which is where I wanted to take the quantum
-  side of this originally.
+- **Multi-period rebalancing.** Use time-indexed qubits x_{i,t} with turnover
+  couplings between periods. This is a natural fit for the XY mixer, one subspace
+  per period.
+- **Scenario CVaR.** Minimize expected shortfall over historical scenarios, using
+  slack bits per scenario. This is the downside-risk counterpart to `skew_aware`.
+- **Black-Litterman views.** Fold investor views into μ; the model shape doesn't
+  change, but the inputs become more realistic.
+- **ESG and exclusion lists.** Linear and pairwise penalties, or fixed qubits.
+- **Grover adaptive search and quantum walks** on the same feasible subspace. Quantum
+  walks are where I originally wanted to take the quantum side of this.
+- **Hardware runs.** `qiskit_backend.py` already builds the circuits for the
+  quadratic models. The open question is how much of the XY advantage survives
+  noise and a heavy-hex qubit layout.
 
 ## Notes
 
-- `exact_eigensolver` needs `qiskit-algorithms`, which is only maintained for
-  Qiskit 1.x; its NumPy eigensolver path still works here, but its QAOA does not.
-- Timings are single-core on one machine and vary between runs. The selections and
-  objectives are seeded and stable.
-- All numbers in this README come from `python run.py --all` and are recorded in
-  `results/results.json`.
+- Numbers come from `python run.py --all` on the seeded synthetic market and are
+  recorded in `results/results.json`. Timings are single-core.
+- The synthetic market is a factor model with five sectors, a crash-prone market
+  factor and a few right-skewed names. The skew model needs that structure, and it
+  makes the results reproducible without network access.

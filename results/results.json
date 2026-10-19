@@ -1,381 +1,1365 @@
 {
-  "setup": {
-    "tickers": [
-      "AAPL",
-      "MSFT",
-      "GOOG",
-      "AMZN",
-      "TSLA",
-      "JPM",
-      "XOM",
-      "JNJ",
-      "PG",
-      "NVDA"
-    ],
-    "lambda": 0.5,
-    "cardinality": 3,
-    "risk_free": 0.03,
-    "synthetic": false,
-    "covariance_psd": true
-  },
-  "solvers": {
-    "brute_force": {
-      "selected": [
-        4,
-        6,
-        8
-      ],
-      "objective": -0.6787742578210192,
-      "seconds": 0.000579700106754899,
-      "feasible": true,
-      "approximation_ratio": 1.0,
-      "found_optimum": true
-    },
-    "greedy": {
-      "selected": [
-        4,
-        6,
-        8
-      ],
-      "objective": -0.6787742578210192,
-      "seconds": 0.00012989994138479233,
-      "feasible": true,
-      "approximation_ratio": 1.0,
-      "found_optimum": true
-    },
-    "qaoa": {
-      "selected": [
-        4,
-        6,
-        8
-      ],
-      "objective": -0.6787742578210192,
-      "seconds": 11.68844940001145,
-      "feasible": true,
-      "top_sample_feasible": true,
-      "n_qubits": 10,
-      "energy": 7.2295456587714995,
-      "shots_on_top": 119,
-      "approximation_ratio": 1.0,
-      "found_optimum": true
-    },
-    "exact_eigensolver": {
-      "selected": [
-        4,
-        6,
-        8
-      ],
-      "objective": -0.6787742578210192,
-      "seconds": 0.011097499867901206,
-      "feasible": true,
-      "energy": -0.6787742578209972,
-      "approximation_ratio": 1.0,
-      "found_optimum": true
-    }
-  },
-  "frontier": [
-    {
-      "lambda": 0.1,
-      "selected": [
-        4,
-        6,
-        9
-      ],
-      "return": 0.49668622858337763,
-      "volatility": 0.4316654682100028,
-      "sharpe": 1.0811293998535398
-    },
-    {
-      "lambda": 1.1473684210526316,
-      "selected": [
-        4,
-        7,
-        8
-      ],
-      "return": 0.32753567503620135,
-      "volatility": 0.2974907335332133,
-      "sharpe": 1.0001510685810422
-    },
-    {
-      "lambda": 2.194736842105263,
-      "selected": [
-        6,
-        7,
-        8
-      ],
-      "return": 0.1744870201761748,
-      "volatility": 0.22523411094222134,
-      "sharpe": 0.6414970608658811
-    },
-    {
-      "lambda": 3.2421052631578946,
-      "selected": [
-        6,
-        7,
-        8
-      ],
-      "return": 0.1744870201761748,
-      "volatility": 0.22523411094222134,
-      "sharpe": 0.6414970608658811
-    },
-    {
-      "lambda": 4.289473684210526,
-      "selected": [
-        6,
-        7,
-        8
-      ],
-      "return": 0.1744870201761748,
-      "volatility": 0.22523411094222134,
-      "sharpe": 0.6414970608658811
-    },
-    {
-      "lambda": 5.336842105263157,
-      "selected": [
-        6,
-        7,
-        8
-      ],
-      "return": 0.1744870201761748,
-      "volatility": 0.22523411094222134,
-      "sharpe": 0.6414970608658811
-    },
-    {
-      "lambda": 6.384210526315789,
-      "selected": [
-        6,
-        7,
-        8
-      ],
-      "return": 0.1744870201761748,
-      "volatility": 0.22523411094222134,
-      "sharpe": 0.6414970608658811
-    },
-    {
-      "lambda": 7.43157894736842,
-      "selected": [
-        6,
-        7,
-        8
-      ],
-      "return": 0.1744870201761748,
-      "volatility": 0.22523411094222134,
-      "sharpe": 0.6414970608658811
-    },
-    {
-      "lambda": 8.478947368421052,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 9.526315789473683,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 10.573684210526315,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 11.621052631578946,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 12.668421052631578,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 13.71578947368421,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 14.76315789473684,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 15.810526315789472,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 16.857894736842105,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 17.905263157894737,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 18.95263157894737,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    },
-    {
-      "lambda": 20.0,
-      "selected": [
-        2,
-        7,
-        8
-      ],
-      "return": 0.12721016498682447,
-      "volatility": 0.22054808111063492,
-      "sharpe": 0.44076631497900143
-    }
+ "setup": {
+  "assets": [
+   "TEC0",
+   "ENE1",
+   "HEA2",
+   "FIN3",
+   "STA4",
+   "TEC5",
+   "ENE6",
+   "HEA7",
+   "FIN8",
+   "STA9",
+   "TEC10",
+   "ENE11"
   ],
-  "scaling": [
-    {
-      "n_assets": 4,
-      "n_qubits": 4,
-      "trials": 5,
-      "found_optimum": 5,
-      "hit_rate": 1.0,
-      "mean_approximation_ratio": 1.0,
-      "mean_seconds": 2.5145939799956976
-    },
-    {
-      "n_assets": 5,
-      "n_qubits": 5,
-      "trials": 5,
-      "found_optimum": 5,
-      "hit_rate": 1.0,
-      "mean_approximation_ratio": 1.0,
-      "mean_seconds": 2.6409101199824363
-    },
-    {
-      "n_assets": 6,
-      "n_qubits": 6,
-      "trials": 5,
-      "found_optimum": 5,
-      "hit_rate": 1.0,
-      "mean_approximation_ratio": 1.0,
-      "mean_seconds": 4.565420260000974
-    },
-    {
-      "n_assets": 7,
-      "n_qubits": 7,
-      "trials": 5,
-      "found_optimum": 5,
-      "hit_rate": 1.0,
-      "mean_approximation_ratio": 1.0,
-      "mean_seconds": 4.742223219992593
-    },
-    {
-      "n_assets": 8,
-      "n_qubits": 8,
-      "trials": 5,
-      "found_optimum": 5,
-      "hit_rate": 1.0,
-      "mean_approximation_ratio": 1.0,
-      "mean_seconds": 5.699907639995217
-    },
-    {
-      "n_assets": 9,
-      "n_qubits": 9,
-      "trials": 5,
-      "found_optimum": 5,
-      "hit_rate": 1.0,
-      "mean_approximation_ratio": 1.0,
-      "mean_seconds": 7.436810760060325
-    },
-    {
-      "n_assets": 10,
-      "n_qubits": 10,
-      "trials": 5,
-      "found_optimum": 5,
-      "hit_rate": 1.0,
-      "mean_approximation_ratio": 1.0,
-      "mean_seconds": 14.7387401599437
-    },
-    {
-      "n_assets": 11,
-      "n_qubits": 11,
-      "trials": 5,
-      "found_optimum": 5,
-      "hit_rate": 1.0,
-      "mean_approximation_ratio": 1.0,
-      "mean_seconds": 31.110515200020746
-    },
-    {
-      "n_assets": 12,
-      "n_qubits": 12,
-      "trials": 5,
-      "found_optimum": 5,
-      "hit_rate": 1.0,
-      "mean_approximation_ratio": 1.0,
-      "mean_seconds": 40.1798693000339
-    }
+  "sectors": [
+   "Tech",
+   "Energy",
+   "Health",
+   "Financials",
+   "Staples",
+   "Tech",
+   "Energy",
+   "Health",
+   "Financials",
+   "Staples",
+   "Tech",
+   "Energy"
+  ],
+  "real": false,
+  "seed": 7,
+  "p": 3
+ },
+ "zoo": {
+  "problems": [
+   {
+    "model": "selection",
+    "description": "Mean-variance selection of 3 of 12 assets",
+    "qubits": 12,
+    "degree": 2,
+    "feasible_portfolios": 220,
+    "optimum": -0.3269398009108587,
+    "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+    "xy_mixer": true
+   },
+   {
+    "model": "allocation",
+    "description": "Integer allocation in 1/4 units, 2 bits per asset",
+    "qubits": 10,
+    "degree": 2,
+    "feasible_portfolios": 65,
+    "optimum": -0.3868653743095041,
+    "selection": "STA4 +75%, HEA2 +25%",
+    "xy_mixer": false
+   },
+   {
+    "model": "tracking",
+    "description": "Track the cap-weighted benchmark with 4 names",
+    "qubits": 12,
+    "degree": 2,
+    "feasible_portfolios": 495,
+    "optimum": 0.0037127679749420564,
+    "selection": "ENE1 +25%, FIN3 +25%, TEC10 +25%, STA9 +25%",
+    "xy_mixer": true
+   },
+   {
+    "model": "long_short",
+    "description": "Dollar-neutral long/short across 10 assets (balanced MaxCut)",
+    "qubits": 10,
+    "degree": 2,
+    "feasible_portfolios": 252,
+    "optimum": -0.14091071726981963,
+    "selection": "TEC0 -10%, ENE1 -10%, HEA2 +10%, FIN3 -10%, STA4 +10%, TEC5 -10%, ENE6 +10%, HEA7 +10%, FIN8 -10%, STA9 +10%",
+    "xy_mixer": true
+   },
+   {
+    "model": "diversified",
+    "description": "Selection of 3 with no pair correlated above 0.35 (10 edges)",
+    "qubits": 12,
+    "degree": 2,
+    "feasible_portfolios": 132,
+    "optimum": -0.2875446209553614,
+    "selection": "HEA2 +33%, STA4 +33%, ENE6 +33%",
+    "xy_mixer": true
+   },
+   {
+    "model": "rebalance",
+    "description": "Rebalance from TEC0/ENE1/HEA2/FIN3 with 100 bp per trade, <= 2 per sector",
+    "qubits": 12,
+    "degree": 2,
+    "feasible_portfolios": 477,
+    "optimum": -0.28483052848509316,
+    "selection": "HEA2 +25%, STA4 +25%, TEC10 +25%, STA9 +25%",
+    "xy_mixer": true
+   },
+   {
+    "model": "skew_aware",
+    "description": "Mean-variance-skewness selection of 3 (kappa=1)",
+    "qubits": 12,
+    "degree": 3,
+    "feasible_portfolios": 220,
+    "optimum": -0.33698357725195704,
+    "selection": "ENE1 +33%, STA4 +33%, STA9 +33%",
+    "xy_mixer": true
+   }
+  ],
+  "rows": [
+   {
+    "model": "selection",
+    "solver": "exact",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.3269398009108587,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.0022994810000014354
+   },
+   {
+    "model": "selection",
+    "solver": "simulated_annealing",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.3269398009108587,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.4898891419999991
+   },
+   {
+    "model": "selection",
+    "solver": "qaoa_x",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.3269398009108587,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.6535319677865024,
+    "p_optimal": 0.0032217251627633613,
+    "amplification": 0.7087795358079395,
+    "seconds": 2.7842528100000017
+   },
+   {
+    "model": "selection",
+    "solver": "qaoa_x_cvar",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.3269398009108587,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.5563816065061185,
+    "p_optimal": 0.0026459241796952956,
+    "amplification": 0.582103319532965,
+    "seconds": 4.931281541000001
+   },
+   {
+    "model": "selection",
+    "solver": "qaoa_warm",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.3269398009108587,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.6740205195403504,
+    "p_optimal": 0.1350793878683603,
+    "amplification": 29.717465331039268,
+    "seconds": 5.053191953999999
+   },
+   {
+    "model": "selection",
+    "solver": "qaoa_xy",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.3269398009108587,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 1.0,
+    "p_optimal": 0.2065713648174968,
+    "amplification": 45.445700259849296,
+    "seconds": 1.2406551039999982
+   },
+   {
+    "model": "selection",
+    "solver": "adiabatic_x",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.3269398009108587,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.3552715341656211,
+    "p_optimal": 0.0017615362817524336,
+    "amplification": 0.3875379819855354,
+    "seconds": 0.023823016000001473
+   },
+   {
+    "model": "selection",
+    "solver": "adiabatic_xy",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.3269398009108587,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 1.0,
+    "p_optimal": 0.4209283438392628,
+    "amplification": 92.60423564463782,
+    "seconds": 0.015842298000002586
+   },
+   {
+    "model": "allocation",
+    "solver": "exact",
+    "qubits": 10,
+    "selection": "STA4 +75%, HEA2 +25%",
+    "objective": -0.3868653743095041,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.0003676179999985152
+   },
+   {
+    "model": "allocation",
+    "solver": "simulated_annealing",
+    "qubits": 10,
+    "selection": "STA4 +75%, HEA2 +25%",
+    "objective": -0.3868653743095041,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.1573580059999955
+   },
+   {
+    "model": "allocation",
+    "solver": "qaoa_x",
+    "qubits": 10,
+    "selection": "STA4 +75%, HEA2 +25%",
+    "objective": -0.3868653743095041,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.3856661962254507,
+    "p_optimal": 0.0060124679638916805,
+    "amplification": 0.3908104176529592,
+    "seconds": 2.038790962
+   },
+   {
+    "model": "allocation",
+    "solver": "qaoa_x_cvar",
+    "qubits": 10,
+    "selection": "STA4 +75%, HEA2 +25%",
+    "objective": -0.3868653743095041,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.44496170152960474,
+    "p_optimal": 0.006960554129291112,
+    "amplification": 0.4524360184039223,
+    "seconds": 3.9448558879999993
+   },
+   {
+    "model": "allocation",
+    "solver": "qaoa_warm",
+    "qubits": 10,
+    "selection": "STA4 +75%, HEA2 +25%",
+    "objective": -0.3868653743095041,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.4066662847655727,
+    "p_optimal": 0.041439084095278,
+    "amplification": 2.69354046619307,
+    "seconds": 2.7360100189999983
+   },
+   {
+    "model": "allocation",
+    "solver": "adiabatic_x",
+    "qubits": 10,
+    "selection": "STA4 +75%, HEA2 +25%",
+    "objective": -0.3868653743095041,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.27795280300446173,
+    "p_optimal": 0.004502343237506748,
+    "amplification": 0.2926523104379386,
+    "seconds": 0.008326875000001621
+   },
+   {
+    "model": "tracking",
+    "solver": "exact",
+    "qubits": 12,
+    "selection": "ENE1 +25%, FIN3 +25%, TEC10 +25%, STA9 +25%",
+    "objective": 0.0037127679749420564,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.00041931900000236055
+   },
+   {
+    "model": "tracking",
+    "solver": "simulated_annealing",
+    "qubits": 12,
+    "selection": "ENE1 +25%, FIN3 +25%, TEC10 +25%, STA9 +25%",
+    "objective": 0.0037127679749420564,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.6027945349999939
+   },
+   {
+    "model": "tracking",
+    "solver": "qaoa_x",
+    "qubits": 12,
+    "selection": "ENE1 +25%, FIN3 +25%, TEC10 +25%, STA9 +25%",
+    "objective": 0.0037127679749420564,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.6908137532641883,
+    "p_optimal": 0.0014084603174723868,
+    "amplification": 0.6971878571488315,
+    "seconds": 2.953781952
+   },
+   {
+    "model": "tracking",
+    "solver": "qaoa_x_cvar",
+    "qubits": 12,
+    "selection": "ENE1 +25%, FIN3 +25%, TEC10 +25%, STA9 +25%",
+    "objective": 0.0037127679749420564,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.29011995427950044,
+    "p_optimal": 0.0005849867812345888,
+    "amplification": 0.2895684567111214,
+    "seconds": 4.089899518000003
+   },
+   {
+    "model": "tracking",
+    "solver": "qaoa_warm",
+    "qubits": 12,
+    "selection": "ENE1 +25%, FIN3 +25%, TEC10 +25%, STA9 +25%",
+    "objective": 0.0037127679749420564,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.8023752582387769,
+    "p_optimal": 0.021904173935718297,
+    "amplification": 10.842566098180557,
+    "seconds": 5.168185770000001
+   },
+   {
+    "model": "tracking",
+    "solver": "qaoa_xy",
+    "qubits": 12,
+    "selection": "ENE1 +25%, FIN3 +25%, TEC10 +25%, STA9 +25%",
+    "objective": 0.0037127679749420564,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 1.0000000000000002,
+    "p_optimal": 0.05021536603208624,
+    "amplification": 24.85660618588269,
+    "seconds": 1.0436145059999973
+   },
+   {
+    "model": "tracking",
+    "solver": "adiabatic_x",
+    "qubits": 12,
+    "selection": "ENE1 +25%, FIN3 +25%, TEC10 +25%, STA9 +25%",
+    "objective": 0.0037127679749420564,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.4198995499829071,
+    "p_optimal": 0.0008601340992376589,
+    "amplification": 0.42576637912264115,
+    "seconds": 0.022470073000000923
+   },
+   {
+    "model": "tracking",
+    "solver": "adiabatic_xy",
+    "qubits": 12,
+    "selection": "ENE1 +25%, FIN3 +25%, TEC10 +25%, STA9 +25%",
+    "objective": 0.0037127679749420564,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 1.0,
+    "p_optimal": 0.21683777033742066,
+    "amplification": 107.33469631702323,
+    "seconds": 0.01875489700000088
+   },
+   {
+    "model": "long_short",
+    "solver": "exact",
+    "qubits": 10,
+    "selection": "TEC0 -10%, ENE1 -10%, HEA2 +10%, FIN3 -10%, STA4 +10%, TEC5 -10%, ENE6 +10%, HEA7 +10%, FIN8 -10%, STA9 +10%",
+    "objective": -0.14091071726981963,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.00022592199999849072
+   },
+   {
+    "model": "long_short",
+    "solver": "simulated_annealing",
+    "qubits": 10,
+    "selection": "TEC0 -10%, ENE1 -10%, HEA2 +10%, FIN3 -10%, STA4 +10%, TEC5 -10%, ENE6 +10%, HEA7 +10%, FIN8 -10%, STA9 +10%",
+    "objective": -0.14091071726981963,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.3748605170000019
+   },
+   {
+    "model": "long_short",
+    "solver": "qaoa_x",
+    "qubits": 10,
+    "selection": "TEC0 -10%, ENE1 -10%, HEA2 +10%, FIN3 -10%, STA4 +10%, TEC5 -10%, ENE6 +10%, HEA7 +10%, FIN8 -10%, STA9 +10%",
+    "objective": -0.14091071726981963,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.710907750980202,
+    "p_optimal": 0.0026742778501559583,
+    "amplification": 0.6739180182393015,
+    "seconds": 1.8649885880000028
+   },
+   {
+    "model": "long_short",
+    "solver": "qaoa_x_cvar",
+    "qubits": 10,
+    "selection": "TEC0 -10%, ENE1 -10%, HEA2 +10%, FIN3 -10%, STA4 +10%, TEC5 -10%, ENE6 +10%, HEA7 +10%, FIN8 -10%, STA9 +10%",
+    "objective": -0.14091071726981963,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.9728368116915369,
+    "p_optimal": 0.0037591598482308755,
+    "amplification": 0.9473082817541807,
+    "seconds": 3.445353204
+   },
+   {
+    "model": "long_short",
+    "solver": "qaoa_warm",
+    "qubits": 10,
+    "selection": "TEC0 -10%, ENE1 -10%, HEA2 +10%, FIN3 -10%, STA4 +10%, TEC5 -10%, ENE6 +10%, HEA7 +10%, FIN8 -10%, STA9 +10%",
+    "objective": -0.14091071726981963,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.9166226973923579,
+    "p_optimal": 0.09942671747571821,
+    "amplification": 25.05553280388099,
+    "seconds": 2.8555601500000023
+   },
+   {
+    "model": "long_short",
+    "solver": "qaoa_xy",
+    "qubits": 10,
+    "selection": "TEC0 -10%, ENE1 -10%, HEA2 +10%, FIN3 -10%, STA4 +10%, TEC5 -10%, ENE6 +10%, HEA7 +10%, FIN8 -10%, STA9 +10%",
+    "objective": -0.14091071726981963,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.9999999999999999,
+    "p_optimal": 0.09380528793606635,
+    "amplification": 23.638932559888723,
+    "seconds": 1.265017787000005
+   },
+   {
+    "model": "long_short",
+    "solver": "adiabatic_x",
+    "qubits": 10,
+    "selection": "TEC0 -10%, ENE1 -10%, HEA2 +10%, FIN3 -10%, STA4 +10%, TEC5 -10%, ENE6 +10%, HEA7 +10%, FIN8 -10%, STA9 +10%",
+    "objective": -0.14091071726981963,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.5857660186740732,
+    "p_optimal": 0.0033579533652855673,
+    "amplification": 0.846204248051963,
+    "seconds": 0.008004366000008645
+   },
+   {
+    "model": "long_short",
+    "solver": "adiabatic_xy",
+    "qubits": 10,
+    "selection": "TEC0 -10%, ENE1 -10%, HEA2 +10%, FIN3 -10%, STA4 +10%, TEC5 -10%, ENE6 +10%, HEA7 +10%, FIN8 -10%, STA9 +10%",
+    "objective": -0.14091071726981963,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 1.0,
+    "p_optimal": 0.283152957672714,
+    "amplification": 71.35454533352393,
+    "seconds": 0.012849638000005825
+   },
+   {
+    "model": "diversified",
+    "solver": "exact",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, ENE6 +33%",
+    "objective": -0.2875446209553614,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.0003733479999965539
+   },
+   {
+    "model": "diversified",
+    "solver": "simulated_annealing",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, ENE6 +33%",
+    "objective": -0.2875446209553614,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.459437340000008
+   },
+   {
+    "model": "diversified",
+    "solver": "qaoa_x",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, ENE6 +33%",
+    "objective": -0.2875446209553614,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.4472476508453882,
+    "p_optimal": 0.00346762401183615,
+    "amplification": 0.4577263695623718,
+    "seconds": 2.6863149910000033
+   },
+   {
+    "model": "diversified",
+    "solver": "qaoa_x_cvar",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, ENE6 +33%",
+    "objective": -0.2875446209553614,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.47238149417802994,
+    "p_optimal": 0.0037589044390953607,
+    "amplification": 0.4961753859605876,
+    "seconds": 4.539143134
+   },
+   {
+    "model": "diversified",
+    "solver": "qaoa_warm",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA9 +33%, TEC10 +33%",
+    "objective": -0.2497237531113639,
+    "ratio": 0.9114909812307103,
+    "found_optimum": false,
+    "p_feasible": 0.5374128426705193,
+    "p_optimal": 0.0013242104252088817,
+    "amplification": 0.17479577612757238,
+    "seconds": 3.6069801589999884
+   },
+   {
+    "model": "diversified",
+    "solver": "qaoa_xy",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, ENE6 +33%",
+    "objective": -0.2875446209553614,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.9823265053113637,
+    "p_optimal": 0.019172847568812518,
+    "amplification": 2.5308158790832525,
+    "seconds": 0.9593824070000068
+   },
+   {
+    "model": "diversified",
+    "solver": "adiabatic_x",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, ENE6 +33%",
+    "objective": -0.2875446209553614,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.24993784102574407,
+    "p_optimal": 0.001965674711393098,
+    "amplification": 0.2594690619038889,
+    "seconds": 0.026425474999996368
+   },
+   {
+    "model": "diversified",
+    "solver": "adiabatic_xy",
+    "qubits": 12,
+    "selection": "HEA2 +33%, STA4 +33%, ENE6 +33%",
+    "objective": -0.2875446209553614,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.9989501121238704,
+    "p_optimal": 0.01795222564197448,
+    "amplification": 2.3696937847406314,
+    "seconds": 0.016960217999994143
+   },
+   {
+    "model": "rebalance",
+    "solver": "exact",
+    "qubits": 12,
+    "selection": "HEA2 +25%, STA4 +25%, TEC10 +25%, STA9 +25%",
+    "objective": -0.28483052848509316,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.0009636430000057317
+   },
+   {
+    "model": "rebalance",
+    "solver": "simulated_annealing",
+    "qubits": 12,
+    "selection": "HEA2 +25%, STA4 +25%, TEC10 +25%, STA9 +25%",
+    "objective": -0.28483052848509316,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.6697366060000007
+   },
+   {
+    "model": "rebalance",
+    "solver": "qaoa_x",
+    "qubits": 12,
+    "selection": "HEA2 +25%, STA4 +25%, TEC10 +25%, STA9 +25%",
+    "objective": -0.28483052848509316,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.6626415517096849,
+    "p_optimal": 0.0015685475142492625,
+    "amplification": 0.7481971642968982,
+    "seconds": 2.902384216999991
+   },
+   {
+    "model": "rebalance",
+    "solver": "qaoa_x_cvar",
+    "qubits": 12,
+    "selection": "HEA2 +25%, STA4 +25%, TEC10 +25%, STA9 +25%",
+    "objective": -0.28483052848509316,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.5615616616030565,
+    "p_optimal": 0.0015321584137072523,
+    "amplification": 0.7308395633383593,
+    "seconds": 4.252609018000001
+   },
+   {
+    "model": "rebalance",
+    "solver": "qaoa_warm",
+    "qubits": 12,
+    "selection": "HEA2 +25%, STA4 +25%, TEC10 +25%, STA9 +25%",
+    "objective": -0.28483052848509316,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.7291675017329382,
+    "p_optimal": 0.10730017249467277,
+    "amplification": 51.18218227995891,
+    "seconds": 4.684872257000009
+   },
+   {
+    "model": "rebalance",
+    "solver": "qaoa_xy",
+    "qubits": 12,
+    "selection": "HEA2 +25%, STA4 +25%, TEC10 +25%, STA9 +25%",
+    "objective": -0.28483052848509316,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.9970597959911897,
+    "p_optimal": 0.0919801976537465,
+    "amplification": 43.87455428083708,
+    "seconds": 0.7396900850000065
+   },
+   {
+    "model": "rebalance",
+    "solver": "adiabatic_x",
+    "qubits": 12,
+    "selection": "HEA2 +25%, STA4 +25%, TEC10 +25%, STA9 +25%",
+    "objective": -0.28483052848509316,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.4090121914503485,
+    "p_optimal": 0.0010226534176842662,
+    "amplification": 0.48780568023539495,
+    "seconds": 0.02939651399999832
+   },
+   {
+    "model": "rebalance",
+    "solver": "adiabatic_xy",
+    "qubits": 12,
+    "selection": "HEA2 +25%, STA4 +25%, TEC10 +25%, STA9 +25%",
+    "objective": -0.28483052848509316,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.9999989885700383,
+    "p_optimal": 0.09303084973829621,
+    "amplification": 44.37571532516729,
+    "seconds": 0.020423892000010824
+   },
+   {
+    "model": "skew_aware",
+    "solver": "exact",
+    "qubits": 12,
+    "selection": "ENE1 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.33698357725195704,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.00039184400000635833
+   },
+   {
+    "model": "skew_aware",
+    "solver": "simulated_annealing",
+    "qubits": 12,
+    "selection": "ENE1 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.33698357725195704,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": null,
+    "p_optimal": null,
+    "amplification": null,
+    "seconds": 0.5653110909999981
+   },
+   {
+    "model": "skew_aware",
+    "solver": "qaoa_x",
+    "qubits": 12,
+    "selection": "ENE1 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.33698357725195704,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.5857425662154048,
+    "p_optimal": 0.002718676720634096,
+    "amplification": 0.5981088785395011,
+    "seconds": 2.677411153999998
+   },
+   {
+    "model": "skew_aware",
+    "solver": "qaoa_x_cvar",
+    "qubits": 12,
+    "selection": "ENE1 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.33698357725195704,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.5599696071636899,
+    "p_optimal": 0.0025848307371245374,
+    "amplification": 0.5686627621673983,
+    "seconds": 4.383812474999999
+   },
+   {
+    "model": "skew_aware",
+    "solver": "qaoa_warm",
+    "qubits": 12,
+    "selection": "ENE1 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.33698357725195704,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 0.676363309982283,
+    "p_optimal": 0.020353240082655398,
+    "amplification": 4.477712818184187,
+    "seconds": 4.385626422999991
+   },
+   {
+    "model": "skew_aware",
+    "solver": "qaoa_xy",
+    "qubits": 12,
+    "selection": "ENE1 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.33698357725195704,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 1.0,
+    "p_optimal": 0.15136562152130642,
+    "amplification": 33.300436734687416,
+    "seconds": 0.6920515329999972
+   },
+   {
+    "model": "skew_aware",
+    "solver": "adiabatic_x",
+    "qubits": 12,
+    "selection": "ENE6 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.3282524882922833,
+    "ratio": 0.984478528516319,
+    "found_optimum": false,
+    "p_feasible": 0.3558763989156699,
+    "p_optimal": 0.0016556212592334515,
+    "amplification": 0.3642366770313593,
+    "seconds": 0.024572419999998374
+   },
+   {
+    "model": "skew_aware",
+    "solver": "adiabatic_xy",
+    "qubits": 12,
+    "selection": "ENE1 +33%, STA4 +33%, STA9 +33%",
+    "objective": -0.33698357725195704,
+    "ratio": 1.0,
+    "found_optimum": true,
+    "p_feasible": 1.0,
+    "p_optimal": 0.2759364197119772,
+    "amplification": 60.706012336634984,
+    "seconds": 0.01739595700000507
+   }
   ]
+ },
+ "depth": [
+  {
+   "mixer": "x",
+   "p": 1,
+   "p_optimal": 0.0019296068404817128,
+   "p_feasible": 0.41376328148942954,
+   "amplification": 0.42451350490597684,
+   "expected_ratio": 0.4600710057632217
+  },
+  {
+   "mixer": "x",
+   "p": 2,
+   "p_optimal": 0.0025187797673606464,
+   "p_feasible": 0.5185069791671574,
+   "amplification": 0.5541315488193422,
+   "expected_ratio": 0.4632988453244698
+  },
+  {
+   "mixer": "x",
+   "p": 3,
+   "p_optimal": 0.0032217251627633613,
+   "p_feasible": 0.6535319677865024,
+   "amplification": 0.7087795358079395,
+   "expected_ratio": 0.4645054965995944
+  },
+  {
+   "mixer": "x",
+   "p": 4,
+   "p_optimal": 0.0036762881055538398,
+   "p_feasible": 0.739563510377593,
+   "amplification": 0.8087833832218447,
+   "expected_ratio": 0.46519710754690174
+  },
+  {
+   "mixer": "x",
+   "p": 5,
+   "p_optimal": 0.00423837915657516,
+   "p_feasible": 0.8391458826821143,
+   "amplification": 0.9324434144465353,
+   "expected_ratio": 0.46650280425898755
+  },
+  {
+   "mixer": "x",
+   "p": 6,
+   "p_optimal": 0.004802013115597594,
+   "p_feasible": 0.9413522813436112,
+   "amplification": 1.0564428854314707,
+   "expected_ratio": 0.46728266357078885
+  },
+  {
+   "mixer": "warm",
+   "p": 1,
+   "p_optimal": 0.08223121998597543,
+   "p_feasible": 0.48191602033219794,
+   "amplification": 18.090868396914598,
+   "expected_ratio": 0.7322841964773265
+  },
+  {
+   "mixer": "warm",
+   "p": 2,
+   "p_optimal": 0.10979021151144391,
+   "p_feasible": 0.5915103289165844,
+   "amplification": 24.15384653251766,
+   "expected_ratio": 0.7430794054599051
+  },
+  {
+   "mixer": "warm",
+   "p": 3,
+   "p_optimal": 0.1350793878683603,
+   "p_feasible": 0.6740205195403504,
+   "amplification": 29.717465331039268,
+   "expected_ratio": 0.7519689067329274
+  },
+  {
+   "mixer": "warm",
+   "p": 4,
+   "p_optimal": 0.16060035178989535,
+   "p_feasible": 0.7474757831186247,
+   "amplification": 35.33207739377698,
+   "expected_ratio": 0.7593703458221707
+  },
+  {
+   "mixer": "warm",
+   "p": 5,
+   "p_optimal": 0.19470708717031837,
+   "p_feasible": 0.9244941906131292,
+   "amplification": 42.835559177470046,
+   "expected_ratio": 0.7609802084121856
+  },
+  {
+   "mixer": "warm",
+   "p": 6,
+   "p_optimal": 0.21035920144903694,
+   "p_feasible": 0.9852440574059156,
+   "amplification": 46.27902431878813,
+   "expected_ratio": 0.7610440413968792
+  },
+  {
+   "mixer": "xy",
+   "p": 1,
+   "p_optimal": 0.053308373452543925,
+   "p_feasible": 1.0,
+   "amplification": 11.727842159559664,
+   "expected_ratio": 0.7132194710166252
+  },
+  {
+   "mixer": "xy",
+   "p": 2,
+   "p_optimal": 0.12502030079042642,
+   "p_feasible": 1.0,
+   "amplification": 27.504466173893814,
+   "expected_ratio": 0.7724760143870485
+  },
+  {
+   "mixer": "xy",
+   "p": 3,
+   "p_optimal": 0.2065713648174968,
+   "p_feasible": 1.0,
+   "amplification": 45.445700259849296,
+   "expected_ratio": 0.8057854944347042
+  },
+  {
+   "mixer": "xy",
+   "p": 4,
+   "p_optimal": 0.2685371192178966,
+   "p_feasible": 1.0,
+   "amplification": 59.07816622793725,
+   "expected_ratio": 0.823402722023904
+  },
+  {
+   "mixer": "xy",
+   "p": 5,
+   "p_optimal": 0.33107642706588386,
+   "p_feasible": 1.0,
+   "amplification": 72.83681395449446,
+   "expected_ratio": 0.8456836776597727
+  },
+  {
+   "mixer": "xy",
+   "p": 6,
+   "p_optimal": 0.36096284519842364,
+   "p_feasible": 1.0,
+   "amplification": 79.4118259436532,
+   "expected_ratio": 0.8610013631321873
+  }
+ ],
+ "anneal": [
+  {
+   "time": 5,
+   "mixer": "x",
+   "p_optimal": 0.001051905623391732,
+   "p_feasible": 0.22314987445602394
+  },
+  {
+   "time": 5,
+   "mixer": "xy",
+   "p_optimal": 0.09682410408690374,
+   "p_feasible": 0.9999999999999999
+  },
+  {
+   "time": 10,
+   "mixer": "x",
+   "p_optimal": 0.0013939141678881494,
+   "p_feasible": 0.28970679448800873
+  },
+  {
+   "time": 10,
+   "mixer": "xy",
+   "p_optimal": 0.23347301856322297,
+   "p_feasible": 1.0
+  },
+  {
+   "time": 20,
+   "mixer": "x",
+   "p_optimal": 0.0017549400318145434,
+   "p_feasible": 0.3541481563502352
+  },
+  {
+   "time": 20,
+   "mixer": "xy",
+   "p_optimal": 0.44766130988913927,
+   "p_feasible": 1.0
+  },
+  {
+   "time": 40,
+   "mixer": "x",
+   "p_optimal": 0.00214930022813821,
+   "p_feasible": 0.4158283615856098
+  },
+  {
+   "time": 40,
+   "mixer": "xy",
+   "p_optimal": 0.7321886430668343,
+   "p_feasible": 0.9999999999999999
+  },
+  {
+   "time": 80,
+   "mixer": "x",
+   "p_optimal": 0.0026275289930847876,
+   "p_feasible": 0.4790912045935188
+  },
+  {
+   "time": 80,
+   "mixer": "xy",
+   "p_optimal": 0.9410833885076935,
+   "p_feasible": 1.0
+  },
+  {
+   "time": 160,
+   "mixer": "x",
+   "p_optimal": 0.003261748691827258,
+   "p_feasible": 0.5476337263163864
+  },
+  {
+   "time": 160,
+   "mixer": "xy",
+   "p_optimal": 0.9855503694441814,
+   "p_feasible": 1.0
+  }
+ ],
+ "penalty": [
+  {
+   "scale": 0.05,
+   "p_optimal": 0.019002636541082897,
+   "p_feasible": 0.549138290273988,
+   "ground_state_is_optimal": true
+  },
+  {
+   "scale": 0.1,
+   "p_optimal": 0.005888949061181438,
+   "p_feasible": 0.5938825628469887,
+   "ground_state_is_optimal": true
+  },
+  {
+   "scale": 0.25,
+   "p_optimal": 0.004095541103738433,
+   "p_feasible": 0.6549003400780179,
+   "ground_state_is_optimal": true
+  },
+  {
+   "scale": 0.5,
+   "p_optimal": 0.0035361668710160326,
+   "p_feasible": 0.6620046004536264,
+   "ground_state_is_optimal": true
+  },
+  {
+   "scale": 1.0,
+   "p_optimal": 0.0032217251627633613,
+   "p_feasible": 0.6535319677865024,
+   "ground_state_is_optimal": true
+  }
+ ],
+ "scaling": [
+  {
+   "n": 6,
+   "k": 2,
+   "mixer": "x",
+   "feasible": 15,
+   "hilbert_dim": 64,
+   "p_optimal": 0.061527951620511334,
+   "amplification": 0.9229192743076701,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 1.4133356679999924
+  },
+  {
+   "n": 6,
+   "k": 2,
+   "mixer": "xy",
+   "feasible": 15,
+   "hilbert_dim": 15,
+   "p_optimal": 0.2514376405433865,
+   "amplification": 3.7715646081507974,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 1.0618405906666624
+  },
+  {
+   "n": 8,
+   "k": 2,
+   "mixer": "x",
+   "feasible": 28,
+   "hilbert_dim": 256,
+   "p_optimal": 0.027781846239561342,
+   "amplification": 0.7778916947077176,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 1.3440504833333289
+  },
+  {
+   "n": 8,
+   "k": 2,
+   "mixer": "xy",
+   "feasible": 28,
+   "hilbert_dim": 28,
+   "p_optimal": 0.14662838004719328,
+   "amplification": 4.105594641321413,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 0.8602159783333434
+  },
+  {
+   "n": 10,
+   "k": 2,
+   "mixer": "x",
+   "feasible": 45,
+   "hilbert_dim": 1024,
+   "p_optimal": 0.014647650826015485,
+   "amplification": 0.6591442871706968,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 1.8992863049999944
+  },
+  {
+   "n": 10,
+   "k": 2,
+   "mixer": "xy",
+   "feasible": 45,
+   "hilbert_dim": 45,
+   "p_optimal": 0.11734687220433536,
+   "amplification": 5.2806092491950904,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 1.2163468306666705
+  },
+  {
+   "n": 12,
+   "k": 3,
+   "mixer": "x",
+   "feasible": 220,
+   "hilbert_dim": 4096,
+   "p_optimal": 0.0028941494166758075,
+   "amplification": 0.6367128716686775,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 2.6455309293333378
+  },
+  {
+   "n": 12,
+   "k": 3,
+   "mixer": "xy",
+   "feasible": 220,
+   "hilbert_dim": 220,
+   "p_optimal": 0.08823565039463864,
+   "amplification": 19.4118430868205,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 0.9768065173333204
+  },
+  {
+   "n": 14,
+   "k": 3,
+   "mixer": "x",
+   "feasible": 364,
+   "hilbert_dim": 16384,
+   "p_optimal": 0.0016733705956964468,
+   "amplification": 0.6091068968335066,
+   "found_in_1024_shots": 2,
+   "trials": 3,
+   "seconds": 5.253483665999994
+  },
+  {
+   "n": 14,
+   "k": 3,
+   "mixer": "xy",
+   "feasible": 364,
+   "hilbert_dim": 364,
+   "p_optimal": 0.03282273897689406,
+   "amplification": 11.947476987589438,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 1.2511107810000037
+  },
+  {
+   "n": 16,
+   "k": 4,
+   "mixer": "x",
+   "feasible": 1820,
+   "hilbert_dim": 65536,
+   "p_optimal": 0.00024913650645390703,
+   "amplification": 0.45342844174611074,
+   "found_in_1024_shots": 1,
+   "trials": 3,
+   "seconds": 29.703313077999997
+  },
+  {
+   "n": 16,
+   "k": 4,
+   "mixer": "xy",
+   "feasible": 1820,
+   "hilbert_dim": 1820,
+   "p_optimal": 0.03193514083967448,
+   "amplification": 58.12195632820755,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 1.8663950556666766
+  },
+  {
+   "n": 18,
+   "k": 4,
+   "mixer": "xy",
+   "feasible": 3060,
+   "hilbert_dim": 3060,
+   "p_optimal": 0.029499795866367445,
+   "amplification": 90.2693753510844,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 1.531037549666678
+  },
+  {
+   "n": 20,
+   "k": 5,
+   "mixer": "xy",
+   "feasible": 15504,
+   "hilbert_dim": 15504,
+   "p_optimal": 0.0022459098393814224,
+   "amplification": 34.82058614976957,
+   "found_in_1024_shots": 3,
+   "trials": 3,
+   "seconds": 3.6859500589999925
+  }
+ ],
+ "frontier": [
+  {
+   "lambda": 0.1,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.20766221891787523
+  },
+  {
+   "lambda": 0.14626533728893854,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.2060243759940221
+  },
+  {
+   "lambda": 0.21393548892246955,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.2067486341253887
+  },
+  {
+   "lambda": 0.3129134644531899,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.20585904179799847
+  },
+  {
+   "lambda": 0.45768393420496095,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.2058381376994872
+  },
+  {
+   "lambda": 0.6694329500821696,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.2049073962731942
+  },
+  {
+   "lambda": 0.9791483623609771,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.20317695979632797
+  },
+  {
+   "lambda": 1.4321546547664015,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.2009536200757778
+  },
+  {
+   "lambda": 2.0947458362933102,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.19470243610048504
+  },
+  {
+   "lambda": 3.063887062800406,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.1829774291369251
+  },
+  {
+   "lambda": 4.481404746557166,
+   "selection": "HEA2 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.38365699453924035,
+   "volatility": 0.23815371848531283,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.15729198218915044
+  },
+  {
+   "lambda": 6.554741767834343,
+   "selection": "ENE6 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.3223821544332515,
+   "volatility": 0.20911336899971464,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.045610919806065776
+  },
+  {
+   "lambda": 9.587315155141832,
+   "selection": "ENE6 +33%, STA4 +33%, STA9 +33%",
+   "return": 0.3223821544332515,
+   "volatility": 0.20911336899971464,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.05240082179357008
+  },
+  {
+   "lambda": 14.022918848621721,
+   "selection": "TEC5 +33%, ENE6 +33%, STA4 +33%",
+   "return": 0.23350092178450219,
+   "volatility": 0.1885833728359333,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.009640226544864744
+  },
+  {
+   "lambda": 20.510669551690707,
+   "selection": "ENE6 +33%, TEC5 +33%, STA9 +33%",
+   "return": 0.17032751815946834,
+   "volatility": 0.1781273037903009,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.040537972038473515
+  },
+  {
+   "lambda": 30.0,
+   "selection": "ENE6 +33%, TEC5 +33%, STA9 +33%",
+   "return": 0.17032751815946834,
+   "volatility": 0.1781273037903009,
+   "qaoa_xy_found": true,
+   "qaoa_xy_p_optimal": 0.06250834119456458
+  }
+ ]
 }

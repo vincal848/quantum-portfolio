@@ -1,18 +1,7 @@
-"""Portfolio statistics, computed on a consistent time basis.
+"""Portfolio statistics on one consistent annual basis.
 
-Two things the original got wrong, both of which made the Sharpe ratio meaningless:
-
-1. It divided the excess return by the portfolio VARIANCE. The Sharpe ratio divides
-   by the standard deviation. Variance is a small number squared, so dividing by it
-   inflates the ratio by roughly 1/sigma -- on daily data that is a factor of tens.
-
-2. It compared a DAILY mean return against an ANNUAL risk-free rate. The returns
-   came from `data.pct_change().mean()`, which is a daily figure, and was then
-   measured against 0.03. Those are not the same units, so the excess return was
-   wrong before the division even happened.
-
-Everything here is annualized before any comparison, and the trading-day count is
-explicit rather than implied.
+Sharpe divides excess return by volatility (not variance), and daily moments are
+annualized before they meet an annual risk-free rate.
 """
 
 import numpy as np
@@ -70,12 +59,8 @@ def summarize(weights, mu, sigma, risk_free_rate=0.03):
 
 
 def approximation_ratio(solver_objective, optimal_objective):
-    """How close a solver got to the true optimum, as a fraction.
-
-    1.0 means it found the optimum. The objective can be negative, so this is a gap
-    relative to the magnitude of the optimum rather than a plain ratio, which would
-    flip sign and become unreadable.
-    """
+    """1 - |gap| / |optimum|. Solvers are scored with Reference.ratio instead, which
+    normalizes by the feasible range and so works for objectives of either sign."""
     denom = abs(optimal_objective)
     if denom == 0:
         return float("nan")
