@@ -89,7 +89,6 @@ layer a single elementwise phase.
 | `run.py` | The comparison, the scaling study, `results/results.json` and the two figures |
 | `tests/test_portfolio.py` | The checks in [How we know the encodings are right](#how-we-know-the-encodings-are-right) |
 | `docs/BACKGROUND.md` | My original write-up on QAOA and adiabatic quantum computing |
-| `legacy/` | The original coursework scripts, kept for reference |
 
 ## The seven models
 
